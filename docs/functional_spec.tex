@@ -1,0 +1,91 @@
+\documentclass[a4paper,12pt]{report}
+\usepackage{polski}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{framed}
+\usepackage{etoolbox}
+\usepackage{graphicx}
+\usepackage{indentfirst}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=black,
+    urlcolor=red,
+}
+
+\urlstyle{same}
+
+\makeatletter
+\patchcmd{\@verbatim}
+  {\verbatim@font}
+  {\verbatim@font\small}
+  {}{}
+\makeatother
+
+\titleformat{\chapter}
+  {\normalfont\LARGE\bfseries}{\thechapter}{1em}{}
+\titlespacing*{\chapter}{0pt}{0.5ex}{0.5ex}
+
+\title{8mu \\ \large Specyfikacja funkcjonalna}
+\author{Krzysztof Piekarczyk \\ \small 288277}
+\date{25 marca 2020}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Krzysztof Piekarczyk 288277}
+\lhead{8mu: Specyfikacja funkcjonalna}
+\rfoot{Strona \thepage \space z \pageref{LastPage}}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+\thispagestyle{fancy}
+
+\chapter{Wstęp}
+\thispagestyle{fancy}
+
+\section{Cel dokumentu}
+Celem tego dokumentu jest przedstawienie funkcjonalności i obsługi programu ''8mu,,.
+
+\section{Cel projektu}
+Celem projektu jest stworzenie interpretera języka CHIP-8, pozwalającego na uruchamianie napisanych w nim programów.
+
+\section{Użytkownik końcowy}
+Użytkownikiem końcowym są ludzie chcący zagrać w najstarsze gry, z których wiele zostało przeportowane na CHIP-8, ponadto każdy, kto chce spróbować swoich sił w pisaniu gier na CHIP-8.
+
+\section{Uzasadnienie nazwy}
+Jako, że interpreter CHIP-8 opiera swoją funkcjonalność na prostej maszynie wirtualnej, bardzo często jest używany jako pierwszy krok do świata emulacji. Postanowiłem więc nadać programowi nazwę ''8mu,, która jest zlepkiem słów CHIP-\textbf{8} i e\textbf{mu}lacja, czytane jako ''ejt-mu,,.
+
+\chapter{Uruchomienie programu}
+\thispagestyle{fancy}
+Program uruchamiany będzie z linii komend: \verb+./8mu <ścieżka>+. Na linii komend zostaną wypisane aktualne kroki w inicjalizacji programu, a po zakończonej inicjalizacji wywołane zostanie osobne okno, które służyć będzie za ekran interpretera CHIP-8.
+
+Program może być uruchomiony również bez podania żadnego argumentu. Zostanie wtedy uruchomiony moduł diagnostyczny, który przeprowadzi testy funkcjonalności i poinformuje o ich wynikach.
+
+\chapter{Dane}
+\thispagestyle{fancy}
+
+\section{Dane wejściowe}
+Danymi wejściowymi są pliki binarne zawierające kod zgodny ze specyfikacją języka CHIP-8 (opieram się na tych dwóch źródłach: \href{https://github.com/mattmikolay/chip-8/wiki/CHIP\%E2\%80\%908-Technical-Reference}{referencja techniczna} oraz \href{https://github.com/mattmikolay/chip-8/wiki/CHIP\%E2\%80\%908-Instruction-Set}{zestaw instrukcji}).
+
+Ponadto, użytkownik może wprowadzać bodźce dla interpretowanego programu poprzez klawisze ''1, 2, 3, 4, Q, W, E, R, A, S, D, F, Z, X, C, V,, a więc siatkę 4x4 na klawiaturze.
+
+\section{Dane wyjściowe}
+Program wyświetla informację o inicjalizacji oraz ekran interpretera, który jest kontrolowany przez interpretowany program. Poza tym, program nie tworzy żadnych nowych plików.
+
+\chapter{Sytuacje wyjątkowe}
+\thispagestyle{fancy}
+Możliwe jest wystąpienie sytuacji, w której w pliku wejściowym, znajdzie się kod operacyjny, który jest niepoprawny lub niezaimplementowany. W wypadku wyłapania takiego kodu na fazie inicjalizacji program zostanie przerwany i zostanie wyświetlona informacja o błędnym kodzie, wraz z pozycją tego kodu w pliku.
+
+\chapter{Testowanie}
+\thispagestyle{fancy}
+Zostanie zaimplementowany komponent diagnostyczny systemu który będzie sprawdzał, czy kody operacyjne są poprawnie wykonywane, będzie on jednak wymagał wizualnego potwierdzenia poprawnej funkcjonalności pod względem kodów dotyczących wyświetlania.
+
+\end{document}
