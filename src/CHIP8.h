@@ -5,18 +5,18 @@
 #ifndef PROJEKT_INDYWIDUALNY_CHIP8_H
 #define PROJEKT_INDYWIDUALNY_CHIP8_H
 
-#include "constants.h"
+#include "spec.h"
 
 class CHIP8 {
     unsigned short opcode;
-    unsigned char memory[MEMORY_SIZE]{};
-    unsigned char V[NUMBER_OF_REGISTERS]{};
+    unsigned char memory[Spec::MEMORY_SIZE]{};
+    unsigned char V[Spec::NUMBER_OF_REGISTERS]{};
     unsigned short I;
     unsigned short pc;
 
-    unsigned char gfx[DISPLAY_SIZE]{};
+    unsigned char gfx[Spec::DISPLAY_SIZE]{};
 
-    unsigned short stack[STACK_SIZE]{};
+    unsigned short stack[Spec::STACK_SIZE]{};
     unsigned char sp;
 
     unsigned char key[0x10]{};
