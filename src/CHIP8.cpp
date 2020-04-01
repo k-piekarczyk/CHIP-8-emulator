@@ -109,6 +109,130 @@ void CHIP8::loadFontset() {
     }
 }
 
+void CHIP8::initializeOpcodeArray() {
+    for (int i = 0; i < 0x10; i++) {
+        for (int j = 0; j < 0x10; j++) {
+            for (int k = 0; k < 0x10; k++) {
+                for (int l = 0; l < 0x10; l++) {
+
+                    switch (i) {
+                        case 0x0:
+                            if (j == 0x0 && k == 0xE) {
+                                if (l == 0x0) opcode_arr[i][j][k][l] = &CHIP8::op_00E0_;
+                                else if (l == 0xE) opcode_arr[i][j][k][l] = &CHIP8::op_00EE_;
+                            } else opcode_arr[i][j][k][l] = &CHIP8::op_0nnn_;
+                            break;
+
+                        case 0x1:
+                            opcode_arr[i][j][k][l] = &CHIP8::op_1nnn_;
+                            break;
+
+                        case 0x2:
+                            opcode_arr[i][j][k][l] = &CHIP8::op_2nnn_;
+                            break;
+
+                        case 0x3:
+                            opcode_arr[i][j][k][l] = &CHIP8::op_3xkk_;
+                            break;
+
+                        case 0x4:
+                            opcode_arr[i][j][k][l] = &CHIP8::op_4xkk_;
+                            break;
+
+                        case 0x5:
+                            opcode_arr[i][j][k][l] = &CHIP8::op_5xy0_;
+                            break;
+
+                        case 0x6:
+                            opcode_arr[i][j][k][l] = &CHIP8::op_6xkk_;
+                            break;
+
+                        case 0x7:
+                            opcode_arr[i][j][k][l] = &CHIP8::op_7xkk_;
+                            break;
+
+                        case 0x8:
+                            switch (l) {
+                                case 0x0:
+                                    opcode_arr[i][j][k][l] = &CHIP8::op_8xy0_;
+                                    break;
+
+                                case 0x1:
+                                    opcode_arr[i][j][k][l] = &CHIP8::op_8xy1_;
+                                    break;
+
+                                case 0x2:
+                                    opcode_arr[i][j][k][l] = &CHIP8::op_8xy2_;
+                                    break;
+
+                                case 0x3:
+                                    opcode_arr[i][j][k][l] = &CHIP8::op_8xy3_;
+                                    break;
+
+                                case 0x4:
+                                    opcode_arr[i][j][k][l] = &CHIP8::op_8xy4_;
+                                    break;
+
+                                case 0x5:
+                                    opcode_arr[i][j][k][l] = &CHIP8::op_8xy5_;
+                                    break;
+
+                                case 0x6:
+                                    opcode_arr[i][j][k][l] = &CHIP8::op_8xy6_;
+                                    break;
+
+                                case 0x7:
+                                    opcode_arr[i][j][k][l] = &CHIP8::op_8xy7_;
+                                    break;
+
+                                case 0xE:
+                                    opcode_arr[i][j][k][l] = &CHIP8::op_8xyE_;
+                                    break;
+                            }
+                            break;
+
+                        case 0x9:
+                            opcode_arr[i][j][k][l] = &CHIP8::op_9xy0_;
+                            break;
+
+                        case 0xA:
+                            opcode_arr[i][j][k][l] = &CHIP8::op_Annn_;
+                            break;
+
+                        case 0xB:
+                            opcode_arr[i][j][k][l] = &CHIP8::op_Bnnn_;
+                            break;
+
+                        case 0xC:
+                            opcode_arr[i][j][k][l] = &CHIP8::op_Cxkk_;
+                            break;
+
+                        case 0xD:
+                            opcode_arr[i][j][k][l] = &CHIP8::op_Dxyn_;
+                            break;
+
+                        case 0xE:
+                            if (k == 0x9 && l == 0xE) opcode_arr[i][j][k][l] = &CHIP8::op_Ex9E_;
+                            else if (k == 0xA && l == 0x1) opcode_arr[i][j][k][l] = &CHIP8::op_ExA1_;
+                            break;
+
+                        case 0xF:
+                            if (k == 0x0 && l == 0x7) opcode_arr[i][j][k][l] = &CHIP8::op_Fx07_;
+                            else if (k == 0x0 && l == 0xA) opcode_arr[i][j][k][l] = &CHIP8::op_Fx0A_;
+                            else if (k == 0x1 && l == 0x5) opcode_arr[i][j][k][l] = &CHIP8::op_Fx15_;
+                            else if (k == 0x1 && l == 0x8) opcode_arr[i][j][k][l] = &CHIP8::op_Fx18_;
+                            else if (k == 0x1 && l == 0xE) opcode_arr[i][j][k][l] = &CHIP8::op_Fx1E_;
+                            else if (k == 0x2 && l == 0x9) opcode_arr[i][j][k][l] = &CHIP8::op_Fx29_;
+                            else if (k == 0x3 && l == 0x3) opcode_arr[i][j][k][l] = &CHIP8::op_Fx33_;
+                            else if (k == 0x5 && l == 0x5) opcode_arr[i][j][k][l] = &CHIP8::op_Fx55_;
+                            else if (k == 0x6 && l == 0x5) opcode_arr[i][j][k][l] = &CHIP8::op_Fx65_;
+                            break;
+                    }
+                }
+            }
+        }
+    }
+}
 
 void CHIP8::op_00E0_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     std::cout << "[ 00E0 ] opcode not implemented" << std::endl;
