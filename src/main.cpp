@@ -1,6 +1,9 @@
 #include <iostream>
 
+#include "CHIP8.h"
+
 int main() {
-    std::cout << "Hello, World!";
-    return 0;
+    CHIP8 chip;
+
+    chip.initialize();
 }
