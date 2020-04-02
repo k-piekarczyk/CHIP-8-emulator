@@ -345,38 +345,58 @@ void CHIP8::op_5xy0_(unsigned char a, unsigned char b, unsigned char c, unsigned
     else pc += 2;
 }
 
+// LD Vx, byte - puts value kk into register Vx
 void CHIP8::op_6xkk_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ 6xkk ] opcode not implemented" << std::endl;
+    unsigned short kk = c << 4 | d;
+    V[b] = kk;
+
     pc += 2;
 }
 
+// ADD Vx, byte - adds value kk to register Vx, stores result in Vx
 void CHIP8::op_7xkk_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ 7xkk ] opcode not implemented" << std::endl;
+    unsigned char kk = c << 4 | d;
+    V[b] += kk;
+
     pc += 2;
 }
 
+// LD Vx, Vy - stores the value of register Vy in register Vx
 void CHIP8::op_8xy0_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ 8xy0 ] opcode not implemented" << std::endl;
+    V[b] = V[c];
+
     pc += 2;
 }
 
+// OR Vx, Vy - performs a bitwise OR on the values of Vx and Vy, then stores the result in Vx
 void CHIP8::op_8xy1_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ 8xy1 ] opcode not implemented" << std::endl;
+    V[b] = V[b] | V[c];
+
     pc += 2;
 }
 
+// AND Vx, Vy - performs a bitwise AND on the values of Vx and Vy, then stores the result in Vx
 void CHIP8::op_8xy2_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ 8xy2 ] opcode not implemented" << std::endl;
+    V[b] = V[b] & V[c];
+
     pc += 2;
 }
 
+// XOR Vx, Vy - performs a bitwise XOR on the values of Vx and Vy, then stores the result in Vx
 void CHIP8::op_8xy3_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ 8xy3 ] opcode not implemented" << std::endl;
+    V[b] = V[b] ^ V[c];
+
     pc += 2;
 }
 
+// ADD Vx, Vy - adds Vx to Vy, stores the lowest 8 bits of the result in Vx, set VF = carry
 void CHIP8::op_8xy4_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ 8xy4 ] opcode not implemented" << std::endl;
+    unsigned short sum = V[b] + V[c];
+    V[b] = sum & 0xFF;
+
+    if (sum > 0xFF) V[0xF] = 1;
+    else V[0xF] = 0;
+
     pc += 2;
 }
 
