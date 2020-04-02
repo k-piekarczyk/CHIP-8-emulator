@@ -7,8 +7,6 @@
 #include "Beeper.h"
 #include "Timer.h"
 
-#include <windows.h>
-
 int main(int argc, char** argv) {
 
     CHIP8 chip;
@@ -29,10 +27,7 @@ int main(int argc, char** argv) {
         std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
         bool cycleCompleted = true;
 
-        int opInCycle = 0;
-
         for (int i = 0; i < Spec::CHIP_FREQUENCY; i++) {
-            opInCycle++;
             if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count() >= 1000) {
                 cycleCompleted = false;
                 break;
@@ -45,8 +40,6 @@ int main(int argc, char** argv) {
             chip.next();
             g.draw();
         }
-
-        std::cout << opInCycle << std::endl;
 
         if(!cycleCompleted) SDL_Delay(1000 - (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count()));
     }
