@@ -15,7 +15,7 @@ class Graphics {
     SDL_Renderer * renderer;
 
 public:
-    Graphics(unsigned char * gfx);
+    explicit Graphics(unsigned char * gfx);
     ~Graphics();
 
     void draw();

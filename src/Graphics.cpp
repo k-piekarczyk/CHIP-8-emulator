@@ -13,7 +13,7 @@ Graphics::Graphics(unsigned char * gfx) : frame(gfx) {
             SDL_WINDOWPOS_CENTERED,
             Spec::H_SIZE * Spec::SCALE,
             Spec::V_SIZE * Spec::SCALE,
-            SDL_WINDOW_MAXIMIZED
+            SDL_WINDOW_SHOWN
     );
 
     if (window == nullptr) {
