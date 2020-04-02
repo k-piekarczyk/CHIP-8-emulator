@@ -267,44 +267,82 @@ void CHIP8::initializeOpcodeArray() {
     }
 }
 
+// CLS - clear screen
 void CHIP8::op_00E0_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ 00E0 ] opcode not implemented" << std::endl;
+    clearDisplay();
     pc += 2;
 }
 
+// RET - return from a subroutine
 void CHIP8::op_00EE_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ 00EE ] opcode not implemented" << std::endl;
-    pc += 2;
+    if (sp < 0) {
+        std::cout << "The stack is empty, can't return from subroutine." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    if (stack[sp] < 0x200) {
+        std::cout << "Attempted jump bellow instruction memory." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    pc = stack[sp];
+    sp--;
 }
 
+// SYS addr - execute a machine language subroutine at address nnn (ignored on modern interpreters)
 void CHIP8::op_0nnn_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ 0nnn ] opcode not implemented" << std::endl;
     pc += 2;
 }
 
+// JMP addr - jump to address nnn
 void CHIP8::op_1nnn_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ 1nnn ] opcode not implemented" << std::endl;
-    pc += 2;
+    unsigned short addr = (b << 8) | (c << 4) | d;
+
+    if (addr < 0x200) {
+        std::cout << "Attempted jump bellow instruction memory." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    pc = addr;
 }
 
+// CALL addr - execute subroutine starting at address nnn
 void CHIP8::op_2nnn_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ 2nnn ] opcode not implemented" << std::endl;
-    pc += 2;
+    unsigned short addr = (b << 8) | (c << 4) | d;
+
+    if (addr < 0x200) {
+        std::cout << "Attempted jump bellow instruction memory." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    if (sp >= Spec::STACK_SIZE) {
+        std::cout << "Stack size exceeded." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    sp++;
+    stack[sp] = pc;
+    pc = addr;
 }
 
+// SE Vx, kk - skip the following instruction if  Vx == kk
 void CHIP8::op_3xkk_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ 3xkk ] opcode not implemented" << std::endl;
-    pc += 2;
+    unsigned short kk = c << 4 | d;
+    if (kk == V[b]) pc += 4;
+    else pc += 2;
 }
 
+// SNE Vx, kk - skip the following instruction if  Vx != kk
 void CHIP8::op_4xkk_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ 4xkk ] opcode not implemented" << std::endl;
-    pc += 2;
+    unsigned short kk = c << 4 | d;
+    if (kk != V[b]) pc += 4;
+    else pc += 2;
 }
 
+// SNE Vx, Vy - skip the following instruction if  Vx == Vy
 void CHIP8::op_5xy0_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ 5xy0 ] opcode not implemented" << std::endl;
-    pc += 2;
+    if (V[b] == V[c]) pc += 4;
+    else pc += 2;
 }
 
 void CHIP8::op_6xkk_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
