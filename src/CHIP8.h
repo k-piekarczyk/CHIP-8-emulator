@@ -16,6 +16,9 @@ class CHIP8 {
 
     unsigned char gfx[Spec::DISPLAY_SIZE]{};
 
+    unsigned char delayTimer{};
+    unsigned char soundTimer{};
+
     unsigned short stack[Spec::STACK_SIZE]{};
     unsigned char sp;
 
@@ -38,6 +41,10 @@ public:
 
     unsigned char *getKeys();
 
+    unsigned char *getDelayTimerPtr();
+
+    unsigned char *getSoundTimerPtr();
+
 private:
     void clearDisplay();
 
@@ -46,6 +53,8 @@ private:
     void clearRegisters();
 
     void clearKeys();
+
+    void resetTimers();
 
     void loadFontset();
 

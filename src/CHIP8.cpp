@@ -19,6 +19,7 @@ void CHIP8::initialize() {
     clearStack();
     clearDisplay();
     clearKeys();
+    resetTimers();
     loadFontset();
     initializeOpcodeArray();
 }
@@ -94,6 +95,11 @@ void CHIP8::clearKeys() {
     }
 }
 
+void CHIP8::resetTimers() {
+    delayTimer = 0;
+    soundTimer = 0;
+}
+
 unsigned char *CHIP8::getGFX() {
     return gfx;
 }
@@ -102,6 +108,13 @@ unsigned char *CHIP8::getKeys() {
     return key;
 }
 
+unsigned char *CHIP8::getDelayTimerPtr() {
+    return &delayTimer;
+}
+
+unsigned char *CHIP8::getSoundTimerPtr() {
+    return &soundTimer;
+}
 
 void CHIP8::loadFontset() {
     unsigned char fontset[80] =
