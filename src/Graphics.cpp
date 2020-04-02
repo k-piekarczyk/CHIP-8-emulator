@@ -35,3 +35,29 @@ Graphics::~Graphics() {
     SDL_DestroyWindow(window);
     SDL_Quit();
 }
+
+void Graphics::draw() {
+    SDL_RenderClear(renderer);
+
+    SDL_Rect currentPixel;
+    currentPixel.h = Spec::SCALE;
+    currentPixel.w = Spec::SCALE;
+
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+    for (int y = 0; y < Spec::V_SIZE; y++) {
+        for (int x = 0; x < Spec::H_SIZE; x++) {
+
+            if (frame[(y * Spec::H_SIZE) + x]) {
+                currentPixel.x = x * Spec::SCALE;
+                currentPixel.y = y * Spec::SCALE;
+
+                SDL_RenderFillRect(renderer, &currentPixel);
+            }
+        }
+    }
+
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderPresent(renderer);
+}
