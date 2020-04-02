@@ -6,8 +6,10 @@
 #define PROJEKT_INDYWIDUALNY_BEEPER_H
 
 
-class Beeper {
-
+class Beeper
+{
+public:
+    void beep();
 };
 
 
