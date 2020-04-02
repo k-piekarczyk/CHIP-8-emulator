@@ -5,7 +5,7 @@
 #include <iostream>
 
 #include "Beeper.h"
-
+// TODO: Get it working with actual sound
 void Beeper::beep() {
     std::cout << "Beep!" << std::endl;
 }

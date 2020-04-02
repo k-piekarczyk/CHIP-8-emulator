@@ -17,8 +17,8 @@ void Timer::update() {
         return;
 
     if (value > 0) {
-        if (value == 1 && beeper != nullptr) beeper->beep();
-        value = value - 1;
+        if (beeper != nullptr) beeper->beep();
+        value--;
     }
 
     timer = std::chrono::steady_clock::now();
