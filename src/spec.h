@@ -21,7 +21,7 @@ public:
     static const int TIMER_FREQUENCY = 60;
 
 private:
-    Spec();
+    Spec() = default;
 };
 
 
