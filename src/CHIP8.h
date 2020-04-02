@@ -33,7 +33,7 @@ public:
 
     void initialize();
 
-    void step();
+    void next();
 
     void loadRom(const char *fileName);
 

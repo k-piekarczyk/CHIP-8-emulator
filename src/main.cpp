@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
             delayTimer.update();
 
             input.update();
-            chip.step();
+            chip.next();
             g.draw();
         }
 

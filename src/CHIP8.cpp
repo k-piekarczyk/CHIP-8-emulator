@@ -24,7 +24,7 @@ void CHIP8::initialize() {
     initializeOpcodeArray();
 }
 
-void CHIP8::step() {
+void CHIP8::next() {
     if (pc > 0xFFF) {
         std::cout << "Program counter larger than 0xFFF (outside memory bounds)." << std::endl;
         exit(EXIT_FAILURE);
