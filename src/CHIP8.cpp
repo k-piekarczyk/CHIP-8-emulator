@@ -400,8 +400,13 @@ void CHIP8::op_8xy4_(unsigned char a, unsigned char b, unsigned char c, unsigned
     pc += 2;
 }
 
+// SUB Vx, Vy - sets VF to 1 if Vx > Vy else to 0, substracts Vy from Vx
 void CHIP8::op_8xy5_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ 8xy5 ] opcode not implemented" << std::endl;
+    if (V[b] > V[c]) V[0xF] = 1;
+    else V[0xF] = 0;
+
+    V[b] = V[b] - V[c];
+
     pc += 2;
 }
 
