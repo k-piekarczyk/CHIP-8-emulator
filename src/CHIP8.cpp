@@ -436,19 +436,41 @@ void CHIP8::op_8xyE_(unsigned char a, unsigned char b, unsigned char c, unsigned
     pc += 2;
 }
 
+// SNE Vx, Vy - skips next instruction if Vx != Vy
 void CHIP8::op_9xy0_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ 9xy0 ] opcode not implemented" << std::endl;
-    pc += 2;
+    if (V[b] != V[c]) pc += 4;
+    else pc += 2;
 }
 
+// LD I, addr - sets register I to nnn
 void CHIP8::op_Annn_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ Annn ] opcode not implemented" << std::endl;
+    unsigned short addr = (b << 8) | (c << 4) | d;
+
+    if (addr < 0x200) {
+        std::cout << "Attempted indexing of restricted memory segments." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    I = addr;
+
     pc += 2;
 }
 
+// JMP V0, addr - jump to location nnn + V0
 void CHIP8::op_Bnnn_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ Bnnn ] opcode not implemented" << std::endl;
-    pc += 2;
+    unsigned short addr = (b << 8) | (c << 4) | d;
+
+    if (addr < 0x200) {
+        std::cout << "Attempted jump bellow instruction memory." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    if (addr + V[0] > 0xFFF) {
+        std::cout << "Requested jump address outside of memory." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    pc = addr + V[0];
 }
 
 void CHIP8::op_Cxkk_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
