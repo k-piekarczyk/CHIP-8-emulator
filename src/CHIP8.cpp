@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <random>
 
 CHIP8::CHIP8() {
     pc = 0x200;
@@ -473,18 +474,50 @@ void CHIP8::op_Bnnn_(unsigned char a, unsigned char b, unsigned char c, unsigned
     pc = addr + V[0];
 }
 
+// RND Vx, byte - sets Vx to a random byte ANDed with kk
 void CHIP8::op_Cxkk_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ Cxkk ] opcode not implemented" << std::endl;
+    unsigned char kk = c << 4 | d;
+
+    std::random_device generator;
+    std::uniform_int_distribution<unsigned char> distribution(0, 0xFF);
+
+    V[b] = distribution(generator) & kk;
+
     pc += 2;
 }
 
+// DRW Vx, Vy, N - draws a sprite at position Vx, Vy with N bytes of sprite data starting at address stored in I, sets VF if any pixel is unset
 void CHIP8::op_Dxyn_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ Dxyn ] opcode not implemented" << std::endl;
+    unsigned char X = V[b];
+    unsigned char Y = V[c];
+    unsigned char N = d;
+
+    bool checkForCollision, collisionDetected = false;
+    unsigned int posX, posY, pos;
+    for (unsigned char n = 0; n < N; n++) {
+        posY = Y + n;
+        for (unsigned char x = 0; x < 8; x++) {
+            checkForCollision = false;
+            posX = X + x;
+            pos = (posY * 64) + posX;
+
+            if (!collisionDetected && gfx[pos]) checkForCollision = true;
+
+            gfx[pos] = gfx[pos] ^ ((memory[I + n] >> (7 - x)) & 1);
+
+            if (checkForCollision)
+                if (!gfx[pos]) collisionDetected = true;
+        }
+    }
+
+    if(collisionDetected) V[0xF] = 1;
+
     pc += 2;
 }
 
+// SKP Vx - skips next instruction if key with the value of Vx is pressed
 void CHIP8::op_Ex9E_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ Ex9E ] opcode not implemented" << std::endl;
+
     pc += 2;
 }
 
