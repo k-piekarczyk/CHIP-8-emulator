@@ -6,6 +6,7 @@
 #include "Beeper.h"
 #include "Timer.h"
 
+
 int main(int argc, char** argv) {
 
     CHIP8 chip;
@@ -30,8 +31,12 @@ int main(int argc, char** argv) {
             input.update();
             chip.next();
             g.draw();
-
     }
 
     return 0;
 }
+
+/**
+ * TODO: Add frequency limiting, move to Runner class
+ * TODO: Perhaps moving the display onto a different thread?
+ */
