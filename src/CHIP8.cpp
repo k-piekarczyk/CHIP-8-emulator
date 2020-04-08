@@ -400,7 +400,7 @@ void CHIP8::op_8xy4_(unsigned char a, unsigned char b, unsigned char c, unsigned
     pc += 2;
 }
 
-// SUB Vx, Vy - sets VF to 1 if Vx > Vy else to 0, substracts Vy from Vx
+// SUB Vx, Vy - sets VF to 1 if Vx > Vy else to 0, subtracts Vy from Vx, stores result in Vx
 void CHIP8::op_8xy5_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     if (V[b] > V[c]) V[0xF] = 1;
     else V[0xF] = 0;
@@ -410,18 +410,29 @@ void CHIP8::op_8xy5_(unsigned char a, unsigned char b, unsigned char c, unsigned
     pc += 2;
 }
 
+// SHR Vx, Vy - stores the value of register Vy shifted right one bit in register Vx, sets register VF to the least significant bit prior to the shift
 void CHIP8::op_8xy6_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ 8xy6 ] opcode not implemented" << std::endl;
+    V[0xF] = V[c] & 1;
+    V[b] = V[c] >> 1;
+
     pc += 2;
 }
 
+// SUBN Vx, Vy - sets VF to 1 if Vy > Vx else to 0, subtracts Vx from Vy, stores result in Vx
 void CHIP8::op_8xy7_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ 8xy7 ] opcode not implemented" << std::endl;
+    if (V[c] > V[b]) V[0xF] = 1;
+    else V[0xF] = 0;
+
+    V[b] = V[c] - V[b];
+
     pc += 2;
 }
 
+// SHL Vx, Vy - stores the value of register Vy shifted left one bit in register Vx, sets register VF to the least significant bit prior to the shift
 void CHIP8::op_8xyE_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ 8xyE ] opcode not implemented" << std::endl;
+    V[0xF] = V[c] & 1;
+    V[b] = V[c] << 1;
+
     pc += 2;
 }
 
