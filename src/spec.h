@@ -17,7 +17,7 @@ public:
     static const int STACK_SIZE = 16;
     static const int NUMBER_OF_REGISTERS = 16;
 
-    static const int CHIP_FREQUENCY = 500;
+    static const int CHIP_FREQUENCY = 1000;
     static const int TIMER_FREQUENCY = 60;
 
 private:
