@@ -21,13 +21,14 @@ int main(int argc, char** argv) {
     Timer soundTimer = Timer(*chip.getSoundTimerPtr(), &beeper);
     Timer delayTimer = Timer(*chip.getDelayTimerPtr());
 
-    chip.loadRom("../roms/heart_monitor.ch8");
+    chip.loadRom("../roms/test_opcode.ch8");
 
     while (!input.isFinished()) {
         std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
         bool cycleCompleted = true;
 
         for (int i = 0; i < Spec::CHIP_FREQUENCY; i++) {
+            cycleCompleted = true;
             if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count() >= 1000) {
                 cycleCompleted = false;
                 break;
