@@ -517,8 +517,8 @@ void CHIP8::op_Dxyn_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // SKP Vx - skips next instruction if key with the value of Vx is pressed
 void CHIP8::op_Ex9E_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-
-    pc += 2;
+    if(key[V[b]]) pc += 4;
+    else pc += 2;
 }
 
 void CHIP8::op_ExA1_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
