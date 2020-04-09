@@ -492,8 +492,8 @@ void CHIP8::op_Cxkk_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // DRW Vx, Vy, N - draws a sprite at position Vx, Vy with N bytes of sprite data starting at address stored in I, sets VF if any pixel is unset
 void CHIP8::op_Dxyn_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    unsigned char X = V[b];
-    unsigned char Y = V[c];
+    unsigned char X = V[b] % Spec::H_SIZE;
+    unsigned char Y = V[c] % Spec::V_SIZE;
     unsigned char N = d;
 
     bool checkForCollision, collisionDetected = false;
@@ -514,20 +514,20 @@ void CHIP8::op_Dxyn_(unsigned char a, unsigned char b, unsigned char c, unsigned
         }
     }
 
-    if(collisionDetected) V[0xF] = 1;
+    if (collisionDetected) V[0xF] = 1;
 
     pc += 2;
 }
 
 // SKP Vx - skips next instruction if key with the value of Vx is pressed
 void CHIP8::op_Ex9E_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    if(keyboard[V[b]]) pc += 4;
+    if (keyboard[V[b]]) pc += 4;
     else pc += 2;
 }
 
 // SKNP Vx - skips next instruction if key with the value of Vx is not pressed
 void CHIP8::op_ExA1_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    if(!keyboard[V[b]]) pc += 4;
+    if (!keyboard[V[b]]) pc += 4;
     else pc += 2;
 }
 
@@ -539,53 +539,83 @@ void CHIP8::op_Fx07_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // LD Vx, K - waits for a key press, stores the value of key press in Vx
 void CHIP8::op_Fx0A_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "Waiting for a keypress..." << std::endl;
-
     input->await();
-
-    std::cout << "You pressed the key..." << std::endl;
-
-    for(int i = 0; i < Spec::NUMBER_OF_KEYS; i++)
-        if(V[i]) {
+    for (int i = 0; i < Spec::NUMBER_OF_KEYS; i++)
+        if (V[i]) {
             V[b] = i;
             break;
         }
-
     pc += 2;
 }
 
+// LD DT, Vx - sets a delay timer to value from Vx
 void CHIP8::op_Fx15_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ Fx15 ] opcode not implemented" << std::endl;
+    delayTimer = V[b];
     pc += 2;
 }
 
+// LD ST, Vx - sets a delay timer to value from Vx
 void CHIP8::op_Fx18_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ Fx18 ] opcode not implemented" << std::endl;
+    soundTimer = V[b];
     pc += 2;
 }
 
+// ADD I, Vx - adds Vx to I, stores result in I
 void CHIP8::op_Fx1E_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ Fx1E ] opcode not implemented" << std::endl;
+
+    unsigned short newI = I + V[b];
+
+    if (newI > 0xFFF) {
+        std::cout << "Attempted addressing outside of memory." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    I = newI;
     pc += 2;
 }
 
+// LD F, Vx - sets I to font with the hexadecimal value of Vx
 void CHIP8::op_Fx29_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ Fx29 ] opcode not implemented" << std::endl;
+    if (V[b] > 0xF) {
+        std::cout << "Attempted setting fonts outside of range: <0, 0xF>" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    I = 0x50 + (V[b] * 5);
     pc += 2;
 }
 
+// LD B, Vx - sets I, I+1, I+2 to BCD coded hundreds, tenths and ones based on value in Vx
 void CHIP8::op_Fx33_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ Fx33 ] opcode not implemented" << std::endl;
+    memory[I] = V[b] / 100;
+    unsigned char rem = V[b] % 100;
+
+    memory[I + 1] = rem / 10;
+    rem = rem / 10;
+
+    memory[I + 2];
+
     pc += 2;
 }
 
+// LD [I], Vx - stores values from registers V0 through Vx in memory starting at I, then increments I by x+1
 void CHIP8::op_Fx55_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ Fx55 ] opcode not implemented" << std::endl;
+    for (int i = 0; i <= b; i++) {
+        memory[I + i] = V[i];
+    }
+
+    I += b + 1;
+
     pc += 2;
 }
 
+// LD Vx, [I] - loads values into registers V0 through Vx from memory starting at I, then increments I by x+1
 void CHIP8::op_Fx65_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ Fx65 ] opcode not implemented" << std::endl;
+    for (int i = 0; i <= b; i++) {
+        V[i] = memory[I + i];
+    }
+
+    I += b + 1;
     pc += 2;
 }
 

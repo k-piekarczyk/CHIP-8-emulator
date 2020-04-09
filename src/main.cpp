@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
     Timer soundTimer = Timer(*chip.getSoundTimerPtr(), &beeper);
     Timer delayTimer = Timer(*chip.getDelayTimerPtr());
 
-    chip.loadRom("../roms/test.ch8");
+    chip.loadRom("../roms/BRIX");
 
     chip.loadInputHandler(&input);
 
