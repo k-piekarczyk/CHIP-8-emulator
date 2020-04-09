@@ -6,6 +6,7 @@
 #define PROJEKT_INDYWIDUALNY_CHIP8_H
 
 #include "spec.h"
+#include "Input.h"
 
 class CHIP8 {
     unsigned short opcode;
@@ -22,7 +23,9 @@ class CHIP8 {
     unsigned short stack[Spec::STACK_SIZE]{};
     unsigned char sp;
 
-    unsigned char key[0x10]{};
+    unsigned char keyboard[Spec::NUMBER_OF_KEYS]{};
+
+    Input *input;
 
     void (CHIP8::*opcode_arr[0x10][0x10][0x10][0x10])(unsigned char, unsigned char, unsigned char, unsigned char);
 
@@ -36,6 +39,8 @@ public:
     void next();
 
     void loadRom(const char *fileName);
+
+    void loadInputHandler(Input *in);
 
     unsigned char *getGFX();
 
@@ -52,7 +57,7 @@ private:
 
     void clearRegisters();
 
-    void clearKeys();
+    void clearKeyboard();
 
     void resetTimers();
 

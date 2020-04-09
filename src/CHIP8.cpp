@@ -19,7 +19,7 @@ void CHIP8::initialize() {
     clearRegisters();
     clearStack();
     clearDisplay();
-    clearKeys();
+    clearKeyboard();
     resetTimers();
     loadFontset();
     initializeOpcodeArray();
@@ -43,6 +43,10 @@ void CHIP8::loadRom(const char *fileName) {
         memory[i] = source.get();
     }
     source.close();
+}
+
+void CHIP8::loadInputHandler(Input *in) {
+    this->input = in;
 }
 
 void CHIP8::fetch() {
@@ -90,8 +94,8 @@ void CHIP8::clearRegisters() {
     }
 }
 
-void CHIP8::clearKeys() {
-    for (unsigned char &i : key) {
+void CHIP8::clearKeyboard() {
+    for (unsigned char &i : keyboard) {
         i = 0;
     }
 }
@@ -106,7 +110,7 @@ unsigned char *CHIP8::getGFX() {
 }
 
 unsigned char *CHIP8::getKeys() {
-    return key;
+    return keyboard;
 }
 
 unsigned char *CHIP8::getDelayTimerPtr() {
@@ -517,22 +521,36 @@ void CHIP8::op_Dxyn_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // SKP Vx - skips next instruction if key with the value of Vx is pressed
 void CHIP8::op_Ex9E_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    if(key[V[b]]) pc += 4;
+    if(keyboard[V[b]]) pc += 4;
     else pc += 2;
 }
 
+// SKNP Vx - skips next instruction if key with the value of Vx is not pressed
 void CHIP8::op_ExA1_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ ExA1 ] opcode not implemented" << std::endl;
-    pc += 2;
+    if(!keyboard[V[b]]) pc += 4;
+    else pc += 2;
 }
 
+// LD Vx, DT - stores the current delay timer value in Vx
 void CHIP8::op_Fx07_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ Fx07 ] opcode not implemented" << std::endl;
+    V[b] = delayTimer;
     pc += 2;
 }
 
+// LD Vx, K - waits for a key press, stores the value of key press in Vx
 void CHIP8::op_Fx0A_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    std::cout << "[ Fx0A ] opcode not implemented" << std::endl;
+    std::cout << "Waiting for a keypress..." << std::endl;
+
+    input->await();
+
+    std::cout << "You pressed the key..." << std::endl;
+
+    for(int i = 0; i < Spec::NUMBER_OF_KEYS; i++)
+        if(V[i]) {
+            V[b] = i;
+            break;
+        }
+
     pc += 2;
 }
 
@@ -570,3 +588,5 @@ void CHIP8::op_Fx65_(unsigned char a, unsigned char b, unsigned char c, unsigned
     std::cout << "[ Fx65 ] opcode not implemented" << std::endl;
     pc += 2;
 }
+
+

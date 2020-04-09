@@ -23,6 +23,8 @@ int main(int argc, char** argv) {
 
     chip.loadRom("../roms/test.ch8");
 
+    chip.loadInputHandler(&input);
+
     while (!input.isFinished()) {
 
             soundTimer.update();
