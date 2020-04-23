@@ -290,7 +290,7 @@ void CHIP8::op_00EE_(unsigned char a, unsigned char b, unsigned char c, unsigned
         exit(EXIT_FAILURE);
     }
 
-    pc = stack[sp];
+    pc = stack[sp] + 2;
     sp--;
 }
 
@@ -591,9 +591,7 @@ void CHIP8::op_Fx33_(unsigned char a, unsigned char b, unsigned char c, unsigned
     unsigned char rem = V[b] % 100;
 
     memory[I + 1] = rem / 10;
-    rem = rem / 10;
-
-    memory[I + 2];
+    memory[I + 2] = rem % 10;
 
     pc += 2;
 }
