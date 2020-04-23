@@ -17,11 +17,10 @@ int main(int argc, char** argv) {
     Input input = Input(chip.getKeys());
 
     Beeper beeper = Beeper();
-
     Timer soundTimer = Timer(*chip.getSoundTimerPtr(), &beeper);
     Timer delayTimer = Timer(*chip.getDelayTimerPtr());
 
-    chip.loadRom("../roms/BRIX");
+    chip.loadRom("../roms/PONG");
 
     chip.loadInputHandler(&input);
 
@@ -33,6 +32,7 @@ int main(int argc, char** argv) {
             input.update();
             chip.next();
             g.draw();
+            SDL_Delay(5);
     }
 
     return 0;
