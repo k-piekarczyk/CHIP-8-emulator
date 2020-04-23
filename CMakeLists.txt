@@ -1,15 +1,23 @@
 cmake_minimum_required(VERSION 3.15)
-project(projekt_indywidualny)
 
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+set(PROJECT_NAME "projekt_indywidualny")
+project(${PROJECT_NAME})
+
+set(SFML_DIR "${CMAKE_CURRENT_LIST_DIR}/libs/SFML-2.5.1/lib/cmake/SFML")
+
+IF(CMAKE_BUILD_TYPE MATCHES Debug)
+    file(GLOB ALL_REQUIRED_DLL "libs/required_dll/debug/*.dll")
+ELSEIF(CMAKE_BUILD_TYPE MATCHES Release)
+    file(GLOB ALL_REQUIRED_DLL "libs/required_dll/release/*.dll")
+ENDIF(CMAKE_BUILD_TYPE MATCHES Debug)
+
+file(COPY ${ALL_REQUIRED_DLL} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 set(CMAKE_CXX_STANDARD 11)
 
-find_package(SDL2 REQUIRED)
-find_package(SFML 2 COMPONENTS REQUIRED system window graphics network audio)
-include_directories(${SDL2_INCLUDE_DIR})
+set(SOURCE_FILES src/main.cpp)
+add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
-set(SOURCE_FILES src/main.cpp src/CHIP8.cpp src/Graphics.cpp src/Input.cpp src/Timer.cpp src/Beeper.cpp)
-add_executable(projekt_indywidualny ${SOURCE_FILES})
+find_package(SFML 2.5.1 COMPONENTS system window graphics network audio REQUIRED)
+target_link_libraries(${PROJECT_NAME} sfml-audio sfml-graphics sfml-window sfml-system)
 
-target_link_libraries(projekt_indywidualny ${SDL2_LIBRARY} -lmingw32 -lSDL2main -lSDL2 -mwindows)
