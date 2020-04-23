@@ -15,7 +15,7 @@ file(COPY ${ALL_REQUIRED_DLL} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES src/main.cpp)
+file(GLOB_RECURSE SOURCE_FILES "src/*.cpp" "src/*.hpp" "src/*.h")
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 find_package(SFML 2.5.1 COMPONENTS system window graphics network audio REQUIRED)

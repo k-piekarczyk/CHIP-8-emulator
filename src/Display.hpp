@@ -7,16 +7,16 @@
 
 #include <SDL.h>
 
-#include "spec.h"
+#include "spec.hpp"
 
-class Graphics {
+class Display {
     unsigned char * frame;
     SDL_Window * window;
     SDL_Renderer * renderer;
 
 public:
-    explicit Graphics(unsigned char * gfx);
-    ~Graphics();
+    explicit Display(unsigned char * gfx);
+    ~Display();
 
     void draw();
 };

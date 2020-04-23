@@ -2,7 +2,7 @@
 // Created by Krzysiek on 31.03.2020.
 //
 
-#include "CHIP8.h"
+#include "CHIP8.hpp"
 
 #include  <iostream>
 #include  <iomanip>

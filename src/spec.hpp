@@ -2,8 +2,8 @@
 // Created by Krzysiek on 31.03.2020.
 //
 
-#ifndef PROJEKT_INDYWIDUALNY_SPEC_H
-#define PROJEKT_INDYWIDUALNY_SPEC_H
+#ifndef PROJEKT_INDYWIDUALNY_SPEC_HPP
+#define PROJEKT_INDYWIDUALNY_SPEC_HPP
 
 class Spec {
 public:
@@ -26,4 +26,4 @@ private:
 };
 
 
-#endif //PROJEKT_INDYWIDUALNY_SPEC_H
+#endif //PROJEKT_INDYWIDUALNY_SPEC_HPP

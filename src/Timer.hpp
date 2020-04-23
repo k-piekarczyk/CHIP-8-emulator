@@ -2,12 +2,12 @@
 // Created by Krzysiek on 02.04.2020.
 //
 
-#ifndef PROJEKT_INDYWIDUALNY_TIMER_H
-#define PROJEKT_INDYWIDUALNY_TIMER_H
+#ifndef PROJEKT_INDYWIDUALNY_TIMER_HPP
+#define PROJEKT_INDYWIDUALNY_TIMER_HPP
 
 #include <chrono>
 
-#include "Beeper.h"
+#include "Beeper.hpp"
 
 class Timer {
     unsigned char &value;
@@ -23,4 +23,4 @@ public:
 };
 
 
-#endif //PROJEKT_INDYWIDUALNY_TIMER_H
+#endif //PROJEKT_INDYWIDUALNY_TIMER_HPP

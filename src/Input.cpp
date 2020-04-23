@@ -5,7 +5,7 @@
 
 
 #include <iostream>
-#include "Input.h"
+#include "Input.hpp"
 
 Input::Input(unsigned char *keys) : keys(keys) {}
 

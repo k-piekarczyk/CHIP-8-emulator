@@ -5,8 +5,8 @@
 #ifndef PROJEKT_INDYWIDUALNY_CHIP8_H
 #define PROJEKT_INDYWIDUALNY_CHIP8_H
 
-#include "spec.h"
-#include "Input.h"
+#include "spec.hpp"
+#include "Input.hpp"`
 
 class CHIP8 {
     unsigned short opcode;

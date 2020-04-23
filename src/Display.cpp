@@ -3,9 +3,9 @@
 //
 
 #include <iostream>
-#include "Graphics.h"
+#include "Display.hpp"
 
-Graphics::Graphics(unsigned char * gfx) : frame(gfx) {
+Display::Display(unsigned char * gfx) : frame(gfx) {
     SDL_Init(SDL_INIT_VIDEO);
     window = SDL_CreateWindow(
             "CHIP-8 Emulator",
@@ -29,14 +29,14 @@ Graphics::Graphics(unsigned char * gfx) : frame(gfx) {
     }
 }
 
-Graphics::~Graphics() {
+Display::~Display() {
     frame = nullptr;
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
 }
 
-void Graphics::draw() {
+void Display::draw() {
     SDL_RenderClear(renderer);
 
     SDL_Rect currentPixel;
