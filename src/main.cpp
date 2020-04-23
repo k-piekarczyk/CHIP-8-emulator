@@ -1,5 +1,4 @@
 #include <iostream>
-#include <chrono>
 
 #include "CHIP8.h"
 #include "Graphics.h"
@@ -20,27 +19,21 @@ int main(int argc, char **argv) {
     Timer soundTimer = Timer(*chip.getSoundTimerPtr(), &beeper);
     Timer delayTimer = Timer(*chip.getDelayTimerPtr());
 
-    chip.loadRom("../roms/PONG");
+    chip.loadRom("../roms/slipperyslope.ch8");
 
     chip.loadInputHandler(&input);
 
     while (!input.isFinished()) {
 
-        auto start = std::chrono::steady_clock::now();
-        auto cycleCounter = 0;
-        while (!input.isFinished() &&
-               std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - start).count() < 10) {
+        for(int i=0;i<30;i++) {
             soundTimer.update();
             delayTimer.update();
 
             input.update();
             chip.next();
             g.draw();
-
-            cycleCounter++;
-            SDL_Delay(1);
         }
-        std::cout << "Number of cycles: " << cycleCounter << ", avg freq [10s]: " << cycleCounter / 10.0 << std::endl;
+        SDL_Delay(2);
     }
 
     return 0;

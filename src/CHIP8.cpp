@@ -343,7 +343,7 @@ void CHIP8::op_2nnn_(unsigned char a, unsigned char b, unsigned char c, unsigned
 void CHIP8::op_3xkk_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     unsigned short kk = c << 4 | d;
 
-    printf("[%04X]: SE V%X, %02X\n", pc, b, kk);
+    printf("[%04X]: SE V%X, %02X (V%X = %02X)\n", pc, b, kk, b, V[b]);
 
     if (kk == V[b]) pc += 4;
     else pc += 2;
@@ -496,11 +496,6 @@ void CHIP8::op_Annn_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
     printf("[%04X]: LD I, %03X\n", pc, addr);
 
-    if (addr < 0x200) {
-        std::cout << "Attempted indexing of restricted memory segments." << std::endl;
-        exit(EXIT_FAILURE);
-    }
-
     I = addr;
 
     pc += 2;
@@ -550,10 +545,10 @@ void CHIP8::op_Dxyn_(unsigned char a, unsigned char b, unsigned char c, unsigned
     bool checkForCollision, collisionDetected = false;
     unsigned int posX, posY, pos;
     for (unsigned char n = 0; n < N; n++) {
-        posY = Y + n;
+        posY = (Y + n) % Spec::V_SIZE;
         for (unsigned char x = 0; x < 8; x++) {
             checkForCollision = false;
-            posX = X + x;
+            posX = (X + x) % Spec::H_SIZE;
             pos = (posY * 64) + posX;
 
             if (!collisionDetected && gfx[pos]) checkForCollision = true;
