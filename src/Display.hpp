@@ -5,6 +5,7 @@
 #ifndef PROJEKT_INDYWIDUALNY_GRAPHICS_H
 #define PROJEKT_INDYWIDUALNY_GRAPHICS_H
 
+#include <iostream>
 #include <SFML/Graphics.hpp>
 
 #include "spec.hpp"
@@ -22,7 +23,6 @@ public:
     ~Display();
 
     void draw();
-    void pollCloseEvent();
 };
 
 

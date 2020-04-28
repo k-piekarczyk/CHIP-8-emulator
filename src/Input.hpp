@@ -5,22 +5,23 @@
 #ifndef PROJEKT_INDYWIDUALNY_INPUT_HPP
 #define PROJEKT_INDYWIDUALNY_INPUT_HPP
 
+#include <iostream>
+
+#include <SFML/Graphics.hpp>
 
 class Input {
     unsigned char * keys;
-    bool quit = false;
+    sf::RenderWindow *window;
 
 public:
-    explicit Input(unsigned char * keys);
+    explicit Input(unsigned char * keys, sf::RenderWindow *window);
 
     void update();
     void await();
-    bool isFinished();
 
 private:
-    void clearKeys();
-
-//    bool handleKeyPress(SDL_Event *e);
+    bool handleKeyPressedEvents(sf::Event &event);
+    bool handleKeyReleasedEvents(sf::Event &event);
 
 
 };

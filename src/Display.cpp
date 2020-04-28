@@ -2,22 +2,13 @@
 // Created by Krzysiek on 01.04.2020.
 //
 
-#include <iostream>
-#include <SFML/Graphics.hpp>
+
 #include "Display.hpp"
 
 Display::Display(unsigned char *gfx) : frame(gfx) {
     window = new sf::RenderWindow(
             sf::VideoMode(Spec::H_SIZE * Spec::SCALE, Spec::V_SIZE * Spec::SCALE),
             "8mu", sf::Style::Close | sf::Style::Titlebar);
-}
-
-void Display::pollCloseEvent() {
-    sf::Event event{};
-    while (window->pollEvent(event)) {
-        if (event.type == sf::Event::Closed)
-            window->close();
-    }
 }
 
 Display::~Display() {

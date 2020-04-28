@@ -593,7 +593,7 @@ void CHIP8::op_Fx07_(unsigned char a, unsigned char b, unsigned char c, unsigned
 void CHIP8::op_Fx0A_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     printf("[%04X]: LD V%X, K\n", pc, b);
 
-    // input->await(); // todo naprawić to
+    input->await();
     for (int i = 0; i < Spec::NUMBER_OF_KEYS; i++)
         if (V[i]) {
             V[b] = i;
