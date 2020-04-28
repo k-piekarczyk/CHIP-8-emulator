@@ -1,40 +1,34 @@
-#include <iostream>
-
-#include "CHIP8.h"
-#include "Graphics.h"
-#include "Input.h"
-#include "Beeper.h"
-#include "Timer.h"
-
+#include "CHIP8.hpp"
+#include "Display.hpp"
+#include "Beeper.hpp"
+#include "Timer.hpp"
 
 int main(int argc, char **argv) {
     CHIP8 chip;
 
     chip.initialize();
 
-    Graphics g = Graphics(chip.getGFX());
-    Input input = Input(chip.getKeys());
+    chip.loadRom("../roms/slipperyslope.ch8");
+
+    Display g = Display(chip.getGFX());
+    Input input = Input(chip.getKeys(), g.window);
+    chip.loadInputHandler(&input);
 
     Beeper beeper = Beeper();
     Timer soundTimer = Timer(*chip.getSoundTimerPtr(), &beeper);
     Timer delayTimer = Timer(*chip.getDelayTimerPtr());
 
-    chip.loadRom("../roms/slipperyslope.ch8");
+    while (g.window->isOpen()) {
+        input.update();
+        soundTimer.update();
+        delayTimer.update();
 
-    chip.loadInputHandler(&input);
-
-    while (!input.isFinished()) {
-
-        for(int i=0;i<30;i++) {
-            soundTimer.update();
-            delayTimer.update();
-
-            input.update();
-            chip.next();
-            g.draw();
-        }
-        SDL_Delay(2);
+        chip.next();
+        g.draw();
     }
 
     return 0;
 }
+
+
+

@@ -2,8 +2,8 @@
 // Created by Krzysiek on 02.04.2020.
 //
 
-#include "Timer.h"
-#include "spec.h"
+#include "Timer.hpp"
+#include "spec.hpp"
 
 Timer::Timer(unsigned char &v) : value(v) {
     timer = std::chrono::steady_clock::now();
