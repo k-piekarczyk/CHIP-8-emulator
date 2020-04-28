@@ -6,7 +6,7 @@
 #define PROJEKT_INDYWIDUALNY_CHIP8_H
 
 #include "spec.hpp"
-#include "Input.hpp"`
+#include "Input.hpp"
 
 class CHIP8 {
     unsigned short opcode;
