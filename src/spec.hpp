@@ -5,6 +5,8 @@
 #ifndef PROJEKT_INDYWIDUALNY_SPEC_HPP
 #define PROJEKT_INDYWIDUALNY_SPEC_HPP
 
+#include <string>
+
 class Spec {
 public:
     static const int SCALE = 10;

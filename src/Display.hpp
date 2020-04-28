@@ -5,20 +5,24 @@
 #ifndef PROJEKT_INDYWIDUALNY_GRAPHICS_H
 #define PROJEKT_INDYWIDUALNY_GRAPHICS_H
 
-#include <SDL.h>
+#include <SFML/Graphics.hpp>
 
 #include "spec.hpp"
 
 class Display {
-    unsigned char * frame;
-    SDL_Window * window;
-    SDL_Renderer * renderer;
+    unsigned char *frame;
+    sf::Color backgroundColor = sf::Color::Black;
+    sf::Color foregroundColor = sf::Color::White;
 
 public:
-    explicit Display(unsigned char * gfx);
+    sf::RenderWindow *window;
+
+    explicit Display(unsigned char *gfx);
+
     ~Display();
 
     void draw();
+    void pollCloseEvent();
 };
 
 

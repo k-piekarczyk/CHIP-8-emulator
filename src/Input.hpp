@@ -5,7 +5,6 @@
 #ifndef PROJEKT_INDYWIDUALNY_INPUT_HPP
 #define PROJEKT_INDYWIDUALNY_INPUT_HPP
 
-#include <SDL.h>
 
 class Input {
     unsigned char * keys;
@@ -21,7 +20,7 @@ public:
 private:
     void clearKeys();
 
-    bool handleKeyPress(SDL_Event *e);
+//    bool handleKeyPress(SDL_Event *e);
 
 
 };
