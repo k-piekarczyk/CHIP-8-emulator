@@ -11,13 +11,13 @@
 
 class Timer {
     unsigned char &value;
-    Beeper *beeper = nullptr;
+    Beeper * beeper = nullptr;
     std::chrono::steady_clock::time_point timer;
 
 public:
     explicit Timer(unsigned char &v);
 
-    Timer(unsigned char &v, Beeper *beeper);
+    Timer(unsigned char &v, bool beeperCheck);
 
     void update();
 };

@@ -5,11 +5,22 @@
 #ifndef PROJEKT_INDYWIDUALNY_BEEPER_H
 #define PROJEKT_INDYWIDUALNY_BEEPER_H
 
+#include <SFML/Audio.hpp>
+#include <cmath>
+#include <iostream>
 
-class Beeper
-{
+class Beeper {
+    sf::Sound sound;
+    sf::SoundBuffer buffer;
+
 public:
-    void beep();
+    Beeper();
+
+    ~Beeper();
+
+    void start();
+
+    void stop();
 };
 
 

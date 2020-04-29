@@ -8,14 +8,14 @@ int main(int argc, char **argv) {
 
     chip.initialize();
 
-    chip.loadRom("../roms/slipperyslope.ch8");
+    chip.loadRom("../roms/pong.ch8");
 
     Display g = Display(chip.getGFX());
     Input input = Input(chip.getKeys(), g.window);
     chip.loadInputHandler(&input);
 
-    Beeper beeper = Beeper();
-    Timer soundTimer = Timer(*chip.getSoundTimerPtr(), &beeper);
+
+    Timer soundTimer = Timer(*chip.getSoundTimerPtr(), true);
     Timer delayTimer = Timer(*chip.getDelayTimerPtr());
 
     while (g.window->isOpen()) {
@@ -25,10 +25,10 @@ int main(int argc, char **argv) {
 
         chip.next();
         g.draw();
+
+//        sf::sleep(sf::microseconds(1000));
     }
 
     return 0;
 }
-
-
 
