@@ -15,19 +15,13 @@ Runner::Runner(std::ifstream &rom) : g(chip.getGFX()), input(chip.getKeys(), g.w
     chip.loadInputHandler(&input);
 }
 
+
 void Runner::start() {
-    while (g.window->isOpen() && !stopSig) {
+    while (g.window->isOpen()) {
         input.update();
         soundTimer.update();
         delayTimer.update();
-
         chip.next();
         g.draw();
-
-        // sf::sleep(sf::microseconds(1000));
     }
-}
-
-void Runner::stop() {
-    stopSig = true;
 }

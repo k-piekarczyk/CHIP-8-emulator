@@ -12,7 +12,6 @@
 
 
 class Runner {
-    bool stopSig = false;
     CHIP8 chip;
 
     Display g;
@@ -24,10 +23,6 @@ public:
     explicit Runner(std::ifstream &rom);
 
     void start();
-    void stop();
-
-private:
-    void chipLoop();
 };
 
 
