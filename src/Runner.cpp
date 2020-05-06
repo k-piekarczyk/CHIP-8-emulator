@@ -2,13 +2,16 @@
 // Created by Krzysiek on 06.05.2020.
 //
 
+
 #include "Runner.hpp"
 
-Runner::Runner(const char *fileName) : g(chip.getGFX()), input(chip.getKeys(), g.window),
+#include <fstream>
+
+Runner::Runner(std::ifstream &rom) : g(chip.getGFX()), input(chip.getKeys(), g.window),
                                        soundTimer(*chip.getSoundTimerPtr(), true),
                                        delayTimer(*chip.getDelayTimerPtr()) {
     chip.initialize();
-    chip.loadRom(fileName);
+    chip.loadRom(rom);
     chip.loadInputHandler(&input);
 }
 

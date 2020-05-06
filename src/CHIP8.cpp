@@ -37,13 +37,11 @@ void CHIP8::next() {
     execute();
 }
 
-void CHIP8::loadRom(const char *fileName) {
-    std::ifstream source = std::ifstream(fileName, std::ios_base::binary);
-
-    for (unsigned short i = 0x200; (i - 0x200 < Spec::MEMORY_SIZE) && source; i++) {
-        memory[i] = source.get();
+void CHIP8::loadRom(std::ifstream &rom) {
+    for (unsigned short i = 0x200; (i - 0x200 < Spec::MEMORY_SIZE) && rom; i++) {
+        memory[i] = rom.get();
     }
-    source.close();
+    rom.close();
 }
 
 void CHIP8::loadInputHandler(Input *in) {

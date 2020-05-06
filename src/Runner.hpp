@@ -10,6 +10,7 @@
 #include "Beeper.hpp"
 #include "Timer.hpp"
 
+
 class Runner {
     bool stopSig = false;
     CHIP8 chip;
@@ -20,7 +21,7 @@ class Runner {
     Timer delayTimer;
 
 public:
-    explicit Runner(const char *fileName);
+    explicit Runner(std::ifstream &rom);
 
     void start();
     void stop();

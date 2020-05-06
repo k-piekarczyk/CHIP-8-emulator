@@ -38,7 +38,7 @@ public:
 
     void next();
 
-    void loadRom(const char *fileName);
+    void loadRom(std::ifstream &rom);
 
     void loadInputHandler(Input *in);
 
