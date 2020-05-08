@@ -14,7 +14,7 @@ void Tester::runTests() {
     }
 }
 
-void Tester::initialize() {
+void Tester::init() {
     opcode_test_arr[0] = &Tester::op_00E0_test_;
     opcode_test_arr[1] = &Tester::op_00EE_test_;
     opcode_test_arr[2] = &Tester::op_0nnn_test_;
@@ -50,4 +50,153 @@ void Tester::initialize() {
     opcode_test_arr[32] = &Tester::op_Fx33_test_;
     opcode_test_arr[33] = &Tester::op_Fx55_test_;
     opcode_test_arr[34] = &Tester::op_Fx65_test_;
+}
+
+void Tester::beforeEach() {
+    initialize();
+}
+
+void Tester::runCurrentOpcode() {
+    decode();
+    execute();
+}
+
+Tester::TestOutcome Tester::op_00E0_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_00EE_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_0nnn_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_1nnn_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_2nnn_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_3xkk_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_4xkk_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_5xy0_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_6xkk_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_7xkk_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_8xy0_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_8xy1_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_8xy2_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_8xy3_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_8xy4_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_8xy5_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_8xy6_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_8xy7_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_8xyE_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_9xy0_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_Annn_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_Bnnn_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_Cxkk_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_Dxyn_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_Ex9E_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_ExA1_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_Fx07_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_Fx0A_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_Fx15_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_Fx18_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_Fx1E_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_Fx29_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_Fx33_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_Fx55_test_() {
+    return Tester::TestOutcome();
+}
+
+Tester::TestOutcome Tester::op_Fx65_test_() {
+    return Tester::TestOutcome();
 }

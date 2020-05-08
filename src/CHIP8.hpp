@@ -5,14 +5,11 @@
 #ifndef PROJEKT_INDYWIDUALNY_CHIP8_H
 #define PROJEKT_INDYWIDUALNY_CHIP8_H
 
-#include "Tester.hpp"
 #include "spec.hpp"
 #include "Input.hpp"
 
 
 class CHIP8 {
-    // friend class Tester;
-
     unsigned short opcode;
     unsigned char memory[Spec::MEMORY_SIZE]{};
     unsigned char V[Spec::NUMBER_OF_REGISTERS]{};
@@ -54,7 +51,7 @@ public:
 
     unsigned char *getSoundTimerPtr();
 
-private:
+protected:
     void clearDisplay();
 
     void clearStack();
@@ -62,6 +59,8 @@ private:
     void clearRegisters();
 
     void clearKeyboard();
+
+    void clearMemory();
 
     void resetTimers();
 

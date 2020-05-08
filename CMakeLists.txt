@@ -18,7 +18,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 add_executable(${PROJECT_NAME}
         src/spec.hpp
-        #src/Tester.hpp src/Tester.cpp
+        src/Tester.hpp src/Tester.cpp
         src/Beeper.hpp src/Beeper.cpp
         src/CHIP8.hpp src/CHIP8.cpp
         src/Display.hpp src/Display.cpp

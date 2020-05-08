@@ -7,7 +7,7 @@
 
 #include "CHIP8.hpp"
 
-class Tester {
+class Tester : CHIP8{
     struct TestOutcome {
         char * name;
         bool success;
@@ -17,7 +17,7 @@ class Tester {
     TestOutcome (Tester::*opcode_test_arr[35])();
 
 public:
-    void initialize();
+    void init();
     void runTests();
 
 private:
