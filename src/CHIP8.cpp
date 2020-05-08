@@ -5,7 +5,6 @@
 #include "CHIP8.hpp"
 
 #include  <iostream>
-#include  <iomanip>
 #include <fstream>
 #include <random>
 

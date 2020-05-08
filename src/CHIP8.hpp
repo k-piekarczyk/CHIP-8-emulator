@@ -7,8 +7,11 @@
 
 #include "spec.hpp"
 #include "Input.hpp"
+#include "Tester.hpp"
 
 class CHIP8 {
+    friend Tester;
+
     unsigned short opcode;
     unsigned char memory[Spec::MEMORY_SIZE]{};
     unsigned char V[Spec::NUMBER_OF_REGISTERS]{};
