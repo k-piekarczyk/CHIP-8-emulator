@@ -15,8 +15,18 @@ file(COPY ${ALL_REQUIRED_DLL} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 set(CMAKE_CXX_STANDARD 11)
 
-file(GLOB_RECURSE SOURCE_FILES "src/*.cpp" "src/*.hpp" "src/*.h")
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+
+add_executable(${PROJECT_NAME}
+        src/spec.hpp
+        #src/Tester.hpp src/Tester.cpp
+        src/Beeper.hpp src/Beeper.cpp
+        src/CHIP8.hpp src/CHIP8.cpp
+        src/Display.hpp src/Display.cpp
+        src/Input.hpp src/Input.cpp
+        src/Runner.hpp src/Runner.cpp
+        src/Timer.hpp src/Timer.cpp
+        src/main.cpp
+        )
 
 find_package(SFML 2.5.1 COMPONENTS system window graphics network audio REQUIRED)
 target_link_libraries(${PROJECT_NAME} sfml-audio sfml-graphics sfml-window sfml-system)

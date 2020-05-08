@@ -5,19 +5,16 @@
 #ifndef PROJEKT_INDYWIDUALNY_TESTER_H
 #define PROJEKT_INDYWIDUALNY_TESTER_H
 
-
 #include "CHIP8.hpp"
 
 class Tester {
-    CHIP8 * chip = nullptr;
-
-    TestOutcome (Tester::*opcode_test_arr[35])();
-
     struct TestOutcome {
         char * name;
         bool success;
         char * message;
     };
+
+    TestOutcome (Tester::*opcode_test_arr[35])();
 
 public:
     void initialize();

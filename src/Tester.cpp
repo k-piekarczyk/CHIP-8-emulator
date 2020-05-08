@@ -5,11 +5,12 @@
 #include "Tester.hpp"
 
 void Tester::runTests() {
+
     TestOutcome testOutcomes[35];
 
     for (int i = 0; i < 35; i++) {
         beforeEach();
-        testOutcomes[i] = opcode_test_arr[i]();
+        testOutcomes[i] = (this->*opcode_test_arr[i])();
     }
 }
 

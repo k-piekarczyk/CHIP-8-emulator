@@ -9,6 +9,7 @@ Display::Display(unsigned char *gfx) : frame(gfx) {
     window = new sf::RenderWindow(
             sf::VideoMode(Spec::H_SIZE * Spec::SCALE, Spec::V_SIZE * Spec::SCALE),
             "8mu", sf::Style::Close | sf::Style::Titlebar);
+    window->setFramerateLimit(0);
 }
 
 Display::~Display() {

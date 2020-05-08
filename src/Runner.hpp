@@ -19,8 +19,10 @@ class Runner {
     Timer soundTimer;
     Timer delayTimer;
 
+    bool delay;
+
 public:
-    explicit Runner(std::ifstream &rom);
+    explicit Runner(std::ifstream &rom, bool delay);
 
     void start();
 };

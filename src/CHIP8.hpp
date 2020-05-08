@@ -5,12 +5,13 @@
 #ifndef PROJEKT_INDYWIDUALNY_CHIP8_H
 #define PROJEKT_INDYWIDUALNY_CHIP8_H
 
+#include "Tester.hpp"
 #include "spec.hpp"
 #include "Input.hpp"
-#include "Tester.hpp"
+
 
 class CHIP8 {
-    friend Tester;
+    // friend class Tester;
 
     unsigned short opcode;
     unsigned char memory[Spec::MEMORY_SIZE]{};
