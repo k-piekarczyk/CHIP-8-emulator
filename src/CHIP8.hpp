@@ -10,6 +10,7 @@
 
 
 class CHIP8 {
+protected:
     unsigned short opcode;
     unsigned char memory[Spec::MEMORY_SIZE]{};
     unsigned char V[Spec::NUMBER_OF_REGISTERS]{};
@@ -32,9 +33,9 @@ class CHIP8 {
 
     void (CHIP8::*opcode_func)(unsigned char, unsigned char, unsigned char, unsigned char);
 
-public:
-    CHIP8();
+    bool verbose = true;
 
+public:
     void initialize();
 
     void next();

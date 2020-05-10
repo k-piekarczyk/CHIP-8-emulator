@@ -9,9 +9,10 @@
 
 class Tester : CHIP8{
     struct TestOutcome {
-        char * name;
+        std::string name;
         bool success;
-        char * message;
+        bool skipped;
+        std::string message;
     };
 
     TestOutcome (Tester::*opcode_test_arr[35])();

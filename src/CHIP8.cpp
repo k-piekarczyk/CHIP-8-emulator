@@ -8,14 +8,12 @@
 #include <fstream>
 #include <random>
 
-CHIP8::CHIP8() {
+void CHIP8::initialize() {
     pc = 0x200;
     opcode = 0;
     I = 0;
     sp = 0;
-}
 
-void CHIP8::initialize() {
     clearMemory();
     clearRegisters();
     clearStack();
@@ -279,7 +277,7 @@ void CHIP8::initializeOpcodeArray() {
 
 // CLS - clear screen
 void CHIP8::op_00E0_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: CLS\n", pc);
+    if (verbose) printf("[%04X]: CLS\n", pc);
 
     clearDisplay();
     pc += 2;
@@ -287,7 +285,7 @@ void CHIP8::op_00E0_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // RET - return from a subroutine
 void CHIP8::op_00EE_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: RET\n", pc);
+    if (verbose) printf("[%04X]: RET\n", pc);
 
     if (sp < 0) {
         std::cout << "The stack is empty, can't return from subroutine." << std::endl;
@@ -312,7 +310,7 @@ void CHIP8::op_0nnn_(unsigned char a, unsigned char b, unsigned char c, unsigned
 void CHIP8::op_1nnn_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     unsigned short addr = (b << 8) | (c << 4) | d;
 
-    printf("[%04X]: JMP %04X\n", pc, addr);
+    if (verbose) printf("[%04X]: JMP %04X\n", pc, addr);
 
     if (addr < 0x200) {
         std::cout << "Attempted jump bellow instruction memory." << std::endl;
@@ -326,7 +324,7 @@ void CHIP8::op_1nnn_(unsigned char a, unsigned char b, unsigned char c, unsigned
 void CHIP8::op_2nnn_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     unsigned short addr = (b << 8) | (c << 4) | d;
 
-    printf("[%04X]: CALL %04X\n", pc, addr);
+    if (verbose) printf("[%04X]: CALL %04X\n", pc, addr);
 
     if (addr < 0x200) {
         std::cout << "Attempted jump bellow instruction memory." << std::endl;
@@ -347,7 +345,7 @@ void CHIP8::op_2nnn_(unsigned char a, unsigned char b, unsigned char c, unsigned
 void CHIP8::op_3xkk_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     unsigned short kk = c << 4 | d;
 
-    printf("[%04X]: SE V%X, %02X (V%X = %02X)\n", pc, b, kk, b, V[b]);
+    if (verbose) printf("[%04X]: SE V%X, %02X (V%X = %02X)\n", pc, b, kk, b, V[b]);
 
     if (kk == V[b]) pc += 4;
     else pc += 2;
@@ -357,7 +355,7 @@ void CHIP8::op_3xkk_(unsigned char a, unsigned char b, unsigned char c, unsigned
 void CHIP8::op_4xkk_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     unsigned short kk = c << 4 | d;
 
-    printf("[%04X]: SNE V%X, %02X\n", pc, b, kk);
+    if (verbose) printf("[%04X]: SNE V%X, %02X\n", pc, b, kk);
 
     if (kk != V[b]) pc += 4;
     else pc += 2;
@@ -365,7 +363,7 @@ void CHIP8::op_4xkk_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // SE Vx, Vy - skip the following instruction if  Vx == Vy
 void CHIP8::op_5xy0_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: SE V%X, V%X\n", pc, b, c);
+    if (verbose) printf("[%04X]: SE V%X, V%X\n", pc, b, c);
 
     if (V[b] == V[c]) pc += 4;
     else pc += 2;
@@ -375,7 +373,7 @@ void CHIP8::op_5xy0_(unsigned char a, unsigned char b, unsigned char c, unsigned
 void CHIP8::op_6xkk_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     unsigned short kk = c << 4 | d;
 
-    printf("[%04X]: LD V%X, %02X\n", pc, b, kk);
+    if (verbose) printf("[%04X]: LD V%X, %02X\n", pc, b, kk);
 
     V[b] = kk;
 
@@ -386,7 +384,7 @@ void CHIP8::op_6xkk_(unsigned char a, unsigned char b, unsigned char c, unsigned
 void CHIP8::op_7xkk_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     unsigned char kk = c << 4 | d;
 
-    printf("[%04X]: ADD V%X, %02X\n", pc, b, kk);
+    if (verbose) printf("[%04X]: ADD V%X, %02X\n", pc, b, kk);
 
     V[b] += kk;
 
@@ -395,7 +393,7 @@ void CHIP8::op_7xkk_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // LD Vx, Vy - stores the value of register Vy in register Vx
 void CHIP8::op_8xy0_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: LD V%X, V%X\n", pc, b, c);
+    if (verbose) printf("[%04X]: LD V%X, V%X\n", pc, b, c);
 
     V[b] = V[c];
 
@@ -404,7 +402,7 @@ void CHIP8::op_8xy0_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // OR Vx, Vy - performs a bitwise OR on the values of Vx and Vy, then stores the result in Vx
 void CHIP8::op_8xy1_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: OR V%X, V%X\n", pc, b, c);
+    if (verbose) printf("[%04X]: OR V%X, V%X\n", pc, b, c);
 
     V[b] = V[b] | V[c];
 
@@ -413,7 +411,7 @@ void CHIP8::op_8xy1_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // AND Vx, Vy - performs a bitwise AND on the values of Vx and Vy, then stores the result in Vx
 void CHIP8::op_8xy2_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: AND V%X, V%X\n", pc, b, c);
+    if (verbose) printf("[%04X]: AND V%X, V%X\n", pc, b, c);
 
     V[b] = V[b] & V[c];
 
@@ -422,7 +420,7 @@ void CHIP8::op_8xy2_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // XOR Vx, Vy - performs a bitwise XOR on the values of Vx and Vy, then stores the result in Vx
 void CHIP8::op_8xy3_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: XOR V%X, V%X\n", pc, b, c);
+    if (verbose) printf("[%04X]: XOR V%X, V%X\n", pc, b, c);
 
     V[b] = V[b] ^ V[c];
 
@@ -431,7 +429,7 @@ void CHIP8::op_8xy3_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // ADD Vx, Vy - adds Vx to Vy, stores the lowest 8 bits of the result in Vx, set VF = carry
 void CHIP8::op_8xy4_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: ADD V%X, V%X\n", pc, b, c);
+    if (verbose) printf("[%04X]: ADD V%X, V%X\n", pc, b, c);
 
     unsigned short sum = V[b] + V[c];
     V[b] = sum & 0xFF;
@@ -444,7 +442,7 @@ void CHIP8::op_8xy4_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // SUB Vx, Vy - sets VF to 1 if Vx > Vy else to 0, subtracts Vy from Vx, stores result in Vx
 void CHIP8::op_8xy5_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: ADD V%X, V%X\n", pc, b, c);
+    if (verbose) printf("[%04X]: ADD V%X, V%X\n", pc, b, c);
 
     if (V[b] > V[c]) V[0xF] = 1;
     else V[0xF] = 0;
@@ -456,7 +454,7 @@ void CHIP8::op_8xy5_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // SHR Vx, Vy - stores the value of register Vy shifted right one bit in register Vx, sets register VF to the least significant bit prior to the shift
 void CHIP8::op_8xy6_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: SHR V%X, V%X\n", pc, b, c);
+    if (verbose) printf("[%04X]: SHR V%X, V%X\n", pc, b, c);
 
     V[0xF] = V[c] & 1;
     V[b] = V[c] >> 1;
@@ -466,7 +464,7 @@ void CHIP8::op_8xy6_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // SUBN Vx, Vy - sets VF to 1 if Vy > Vx else to 0, subtracts Vx from Vy, stores result in Vx
 void CHIP8::op_8xy7_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: SUBN V%X, V%X\n", pc, b, c);
+    if (verbose) printf("[%04X]: SUBN V%X, V%X\n", pc, b, c);
 
     if (V[c] > V[b]) V[0xF] = 1;
     else V[0xF] = 0;
@@ -478,7 +476,7 @@ void CHIP8::op_8xy7_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // SHL Vx, Vy - stores the value of register Vy shifted left one bit in register Vx, sets register VF to the least significant bit prior to the shift
 void CHIP8::op_8xyE_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: SHL V%X, V%X\n", pc, b, c);
+    if (verbose) printf("[%04X]: SHL V%X, V%X\n", pc, b, c);
 
     V[0xF] = V[c] & 1;
     V[b] = V[c] << 1;
@@ -488,7 +486,7 @@ void CHIP8::op_8xyE_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // SNE Vx, Vy - skips next instruction if Vx != Vy
 void CHIP8::op_9xy0_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: SNE V%X, V%X\n", pc, b, c);
+    if (verbose) printf("[%04X]: SNE V%X, V%X\n", pc, b, c);
 
     if (V[b] != V[c]) pc += 4;
     else pc += 2;
@@ -498,7 +496,7 @@ void CHIP8::op_9xy0_(unsigned char a, unsigned char b, unsigned char c, unsigned
 void CHIP8::op_Annn_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     unsigned short addr = (b << 8) | (c << 4) | d;
 
-    printf("[%04X]: LD I, %03X\n", pc, addr);
+    if (verbose) printf("[%04X]: LD I, %03X\n", pc, addr);
 
     I = addr;
 
@@ -509,7 +507,7 @@ void CHIP8::op_Annn_(unsigned char a, unsigned char b, unsigned char c, unsigned
 void CHIP8::op_Bnnn_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     unsigned short addr = (b << 8) | (c << 4) | d;
 
-    printf("[%04X]: JMP V0, %03X\n", pc, addr);
+    if (verbose) printf("[%04X]: JMP V0, %03X\n", pc, addr);
 
     if (addr < 0x200) {
         std::cout << "Attempted jump bellow instruction memory." << std::endl;
@@ -528,7 +526,7 @@ void CHIP8::op_Bnnn_(unsigned char a, unsigned char b, unsigned char c, unsigned
 void CHIP8::op_Cxkk_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     unsigned char kk = c << 4 | d;
 
-    printf("[%04X]: RND V%X, %02X\n", pc, b, kk);
+    if (verbose) printf("[%04X]: RND V%X, %02X\n", pc, b, kk);
 
     std::random_device generator;
     std::uniform_int_distribution<unsigned char> distribution(0, 0xFF);
@@ -540,7 +538,7 @@ void CHIP8::op_Cxkk_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // DRW Vx, Vy, N - draws a sprite at position Vx, Vy with N bytes of sprite data starting at address stored in I, sets VF if any pixel is unset
 void CHIP8::op_Dxyn_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: DRW V%X, V%X, %X\n", pc, b, c, d);
+    if (verbose) printf("[%04X]: DRW V%X, V%X, %X\n", pc, b, c, d);
 
     unsigned char X = V[b] % Spec::H_SIZE;
     unsigned char Y = V[c] % Spec::V_SIZE;
@@ -571,7 +569,7 @@ void CHIP8::op_Dxyn_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // SKP Vx - skips next instruction if key with the value of Vx is pressed
 void CHIP8::op_Ex9E_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: SKP V%X\n", pc, b);
+    if (verbose) printf("[%04X]: SKP V%X\n", pc, b);
 
     if (keyboard[V[b]]) pc += 4;
     else pc += 2;
@@ -579,7 +577,7 @@ void CHIP8::op_Ex9E_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // SKNP Vx - skips next instruction if key with the value of Vx is not pressed
 void CHIP8::op_ExA1_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: SKNP V%X\n", pc, b);
+    if (verbose) printf("[%04X]: SKNP V%X\n", pc, b);
 
     if (!keyboard[V[b]]) pc += 4;
     else pc += 2;
@@ -587,7 +585,7 @@ void CHIP8::op_ExA1_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // LD Vx, DT - stores the current delay timer value in Vx
 void CHIP8::op_Fx07_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: LD V%X, DT\n", pc, b);
+    if (verbose) printf("[%04X]: LD V%X, DT\n", pc, b);
 
     V[b] = delayTimer;
     pc += 2;
@@ -595,7 +593,7 @@ void CHIP8::op_Fx07_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // LD Vx, K - waits for a key press, stores the value of key press in Vx
 void CHIP8::op_Fx0A_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: LD V%X, K\n", pc, b);
+    if (verbose) printf("[%04X]: LD V%X, K\n", pc, b);
 
     input->await();
     for (int i = 0; i < Spec::NUMBER_OF_KEYS; i++)
@@ -608,7 +606,7 @@ void CHIP8::op_Fx0A_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // LD DT, Vx - sets a delay timer to value from Vx
 void CHIP8::op_Fx15_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: LD DT, V%X\n", pc, b);
+    if (verbose) printf("[%04X]: LD DT, V%X\n", pc, b);
 
     delayTimer = V[b];
     pc += 2;
@@ -616,14 +614,14 @@ void CHIP8::op_Fx15_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // LD ST, Vx - sets a delay timer to value from Vx
 void CHIP8::op_Fx18_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: LD ST, V%X\n", pc, b);
+    if (verbose) printf("[%04X]: LD ST, V%X\n", pc, b);
     soundTimer = V[b];
     pc += 2;
 }
 
 // ADD I, Vx - adds Vx to I, stores result in I
 void CHIP8::op_Fx1E_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: ADD I, V%X\n", pc, b);
+    if (verbose) printf("[%04X]: ADD I, V%X\n", pc, b);
 
     unsigned short newI = I + V[b];
 
@@ -638,7 +636,7 @@ void CHIP8::op_Fx1E_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // LD F, Vx - sets I to font with the hexadecimal value of Vx
 void CHIP8::op_Fx29_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: LD F, V%X\n", pc, b);
+    if (verbose) printf("[%04X]: LD F, V%X\n", pc, b);
 
     if (V[b] > 0xF) {
         std::cout << "Attempted setting fonts outside of range: <0, 0xF>" << std::endl;
@@ -651,7 +649,7 @@ void CHIP8::op_Fx29_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // LD B, Vx - sets I, I+1, I+2 to BCD coded hundreds, tenths and ones based on value in Vx
 void CHIP8::op_Fx33_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: LD B, V%X\n", pc, b);
+    if (verbose) printf("[%04X]: LD B, V%X\n", pc, b);
 
     memory[I] = V[b] / 100;
     unsigned char rem = V[b] % 100;
@@ -664,7 +662,7 @@ void CHIP8::op_Fx33_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // LD [I], Vx - stores values from registers V0 through Vx in memory starting at I, then increments I by x+1
 void CHIP8::op_Fx55_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: LD [I], V%X\n", pc, b);
+    if (verbose) printf("[%04X]: LD [I], V%X\n", pc, b);
 
     for (int i = 0; i <= b; i++) {
         memory[I + i] = V[i];
@@ -677,7 +675,7 @@ void CHIP8::op_Fx55_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
 // LD Vx, [I] - loads values into registers V0 through Vx from memory starting at I, then increments I by x+1
 void CHIP8::op_Fx65_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
-    printf("[%04X]: V%X, LD [I]\n", pc, b);
+    if (verbose) printf("[%04X]: V%X, LD [I]\n", pc, b);
 
     for (int i = 0; i <= b; i++) {
         V[i] = memory[I + i];

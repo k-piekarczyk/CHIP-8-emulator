@@ -1,6 +1,7 @@
 #include <fstream>
 #include <string>
 #include "Runner.hpp"
+#include "Tester.hpp"
 
 int main(int argc, char **argv) {
     bool delay = false;
@@ -20,7 +21,11 @@ int main(int argc, char **argv) {
             std::cout << "Unable to open \"" << argv[1] << "\"!"<< std::endl;
         }
     } else {
-        std::cout << "Diagnostic run here" << std::endl;
+        std::cout << "Running in diagnostic mode!" << std::endl << std::endl;
+
+        Tester tester{};
+        tester.init();
+        tester.runTests();
     }
 
     return 0;
