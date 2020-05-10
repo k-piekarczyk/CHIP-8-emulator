@@ -564,6 +564,8 @@ void CHIP8::op_Dxyn_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
     if (collisionDetected) V[0xF] = 1;
 
+    drawPerformed = true;
+
     pc += 2;
 }
 

@@ -17,15 +17,14 @@ Runner::Runner(std::ifstream &rom, bool delay) : g(chip.getGFX()), input(chip.ge
 
 
 void Runner::start() {
-    std::chrono::steady_clock::time_point lastDraw = std::chrono::steady_clock::now();
     while (g.window->isOpen()) {
         input.update();
         soundTimer.update();
         delayTimer.update();
         chip.next();
-        if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - lastDraw).count() < 16){
+        if (chip.drawPerformed){
             g.draw();
-            lastDraw = std::chrono::steady_clock::now();
+            chip.drawPerformed = false;
         }
         if(delay) sf::sleep(sf::milliseconds(1));
     }
