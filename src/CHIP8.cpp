@@ -280,6 +280,7 @@ void CHIP8::op_00E0_(unsigned char a, unsigned char b, unsigned char c, unsigned
     if (verbose) printf("[%04X]: CLS\n", pc);
 
     clearDisplay();
+    drawPerformed = true;
     pc += 2;
 }
 
@@ -287,17 +288,17 @@ void CHIP8::op_00E0_(unsigned char a, unsigned char b, unsigned char c, unsigned
 void CHIP8::op_00EE_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     if (verbose) printf("[%04X]: RET\n", pc);
 
-    if (sp < 0) {
+    if (sp == 0) {
         std::cout << "The stack is empty, can't return from subroutine." << std::endl;
         exit(EXIT_FAILURE);
     }
 
-    if (stack[sp] < 0x200) {
+    if (stack[sp - 1] < 0x200) {
         std::cout << "Attempted jump bellow instruction memory." << std::endl;
         exit(EXIT_FAILURE);
     }
 
-    pc = stack[sp] + 2;
+    pc = stack[sp - 1] + 2;
     sp--;
 }
 
@@ -337,7 +338,7 @@ void CHIP8::op_2nnn_(unsigned char a, unsigned char b, unsigned char c, unsigned
     }
 
     sp++;
-    stack[sp] = pc;
+    stack[sp - 1] = pc;
     pc = addr;
 }
 

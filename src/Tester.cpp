@@ -94,12 +94,12 @@ void Tester::runCurrentOpcode() {
 
 // CLS - clear screen
 Tester::TestOutcome Tester::op_00E0_test_() {
-    CHIP8::opcode = 0x00E0;
-
-    runCurrentOpcode();
     TestOutcome outcome{"00E0", true, false};
 
-    for (auto pixel : CHIP8::gfx)
+    opcode = 0x00E0;
+    runCurrentOpcode();
+
+    for (auto pixel : gfx)
         if (pixel != 0) {
             outcome.success = false;
             outcome.message = "The screen is not properly cleared.";
@@ -109,30 +109,95 @@ Tester::TestOutcome Tester::op_00E0_test_() {
     return outcome;
 }
 
+// RET - return from a subroutine
 Tester::TestOutcome Tester::op_00EE_test_() {
+    TestOutcome outcome{"00EE", true, false};
+
+    sp = 1;
+    stack[0] = 0x270;
+    pc = 0x300;
+    opcode = 0x00EE;
+
     runCurrentOpcode();
-    TestOutcome outcome{"00EE", false, true};
+
+    if(sp != 0) {
+        outcome.success = false;
+        outcome.message = "Failed to correctly decrease the stack pointer.";
+        return outcome;
+    }
+
+    if(pc != 0x270 + 2) {
+        outcome.success = false;
+        outcome.message = "Failed to set the program counter to the correct value.";
+        return outcome;
+    }
 
     return outcome;
 }
 
+// SYS addr - execute a machine language subroutine at address nnn (ignored on modern interpreters)
 Tester::TestOutcome Tester::op_0nnn_test_() {
+    TestOutcome outcome{"0nnn", true, false};
+
+    opcode = 0x0123;
+    pc = 0x300;
+
     runCurrentOpcode();
-    TestOutcome outcome{"0nnn", false, true};
+
+    if(pc != 0x300 + 2) {
+        outcome.success = false;
+        outcome.message = "Failed to properly increment the program counter.";
+        return outcome;
+    }
 
     return outcome;
 }
 
+// JMP addr - jump to address nnn
 Tester::TestOutcome Tester::op_1nnn_test_() {
+    TestOutcome outcome{"1nnn", true, false};
+
+    opcode = 0x1333;
+    pc = 0x200;
+
     runCurrentOpcode();
-    TestOutcome outcome{"1nnn", false, true};
+
+    if(pc != 0x333) {
+        outcome.success = false;
+        outcome.message = "Failed to set the program counter to the correct value.";
+        return outcome;
+    }
 
     return outcome;
 }
 
+// CALL addr - execute subroutine starting at address nnn
 Tester::TestOutcome Tester::op_2nnn_test_() {
+    TestOutcome outcome{"2nnn", true, false};
+
+    opcode = 0x2333;
+    pc = 0x500;
+    sp = 0;
+
     runCurrentOpcode();
-    TestOutcome outcome{"2nnn", false, true};
+
+    if(pc != 0x333) {
+        outcome.success = false;
+        outcome.message = "Failed to set the program counter to the correct value.";
+        return outcome;
+    }
+
+    if(sp != 1) {
+        outcome.success = false;
+        outcome.message = "Failed to increment stack pointer.";
+        return outcome;
+    }
+
+    if(stack[0] != 0x500) {
+        outcome.success = false;
+        outcome.message = "Failed to push program counter value to stack.";
+        return outcome;
+    }
 
     return outcome;
 }
