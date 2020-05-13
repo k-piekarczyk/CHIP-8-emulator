@@ -267,9 +267,36 @@ Tester::TestOutcome Tester::op_4xkk_test_() {
     return outcome;
 }
 
+// SE Vx, Vy - skip the following instruction if  Vx == Vy
 Tester::TestOutcome Tester::op_5xy0_test_() {
-    runCurrentOpcode();
     TestOutcome outcome{"5xy0", false, true};
+    opcode = 0x5020;
+    pc = 0x300;
+    V[0] = 0x21;
+    V[2] = 0x21;
+
+    runCurrentOpcode();
+
+    if(pc != 0x300 + 4) {
+        outcome.success = false;
+        outcome.message = "Failed to skip the following instruction when registers are equal.";
+        return outcome;
+    }
+
+    beforeEach();
+
+    opcode = 0x5020;
+    pc = 0x300;
+    V[0] = 0x20;
+    V[2] = 0x21;
+
+    runCurrentOpcode();
+
+    if(pc != 0x300 + 2) {
+        outcome.success = false;
+        outcome.message = "Failed to not skip the following instruction when registers are not equal.";
+        return outcome;
+    }
 
     return outcome;
 }
