@@ -319,9 +319,19 @@ Tester::TestOutcome Tester::op_6xkk_test_() {
     return outcome;
 }
 
+// ADD Vx, byte - adds value kk to register Vx, stores result in Vx
 Tester::TestOutcome Tester::op_7xkk_test_() {
+    TestOutcome outcome{"7xkk", true, false};
+
+    opcode = 0x7005;
+    V[0] = 0x5;
     runCurrentOpcode();
-    TestOutcome outcome{"7xkk", false, true};
+
+    if(V[0] != 0xA) {
+        outcome.success = false;
+        outcome.message = "Failed to properly add the value to the value in register.";
+        return outcome;
+    }
 
     return outcome;
 }
