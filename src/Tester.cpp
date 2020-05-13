@@ -301,9 +301,11 @@ Tester::TestOutcome Tester::op_5xy0_test_() {
     return outcome;
 }
 
+// LD Vx, byte - puts value kk into register Vx
 Tester::TestOutcome Tester::op_6xkk_test_() {
+    TestOutcome outcome{"6xkk", true, false};
+
     runCurrentOpcode();
-    TestOutcome outcome{"6xkk", false, true};
 
     return outcome;
 }
