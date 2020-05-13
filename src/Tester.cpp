@@ -365,7 +365,7 @@ Tester::TestOutcome Tester::op_8xy1_test_() {
 
     if (V[0] != 0b11110110) {
         outcome.success = false;
-        outcome.message = "Failed to properly load the value into the register.";
+        outcome.message = "Failed to properly perform the OR operation.";
         return outcome;
     }
 
@@ -390,9 +390,20 @@ Tester::TestOutcome Tester::op_8xy2_test_() {
     return outcome;
 }
 
+// XOR Vx, Vy - performs a bitwise XOR on the values of Vx and Vy, then stores the result in Vx
 Tester::TestOutcome Tester::op_8xy3_test_() {
+    TestOutcome outcome{"8xy3", true, false};
+
+    opcode = 0x8013;
+    V[0] = 0b10110110;
+    V[1] = 0b11100000;
     runCurrentOpcode();
-    TestOutcome outcome{"8xy3", false, true};
+
+    if (V[0] != 0b01010110) {
+        outcome.success = false;
+        outcome.message = "Failed to properly perform the XOR operation.";
+        return outcome;
+    }
 
     return outcome;
 }
