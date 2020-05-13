@@ -235,9 +235,34 @@ Tester::TestOutcome Tester::op_3xkk_test_() {
     return outcome;
 }
 
+// SNE Vx, kk - skip the following instruction if  Vx != kk
 Tester::TestOutcome Tester::op_4xkk_test_() {
+    TestOutcome outcome{"4xkk", true, false};
+    opcode = 0x412A;
+    pc = 0x300;
+    V[1] = 0x21;
+
     runCurrentOpcode();
-    TestOutcome outcome{"4xkk", false, true};
+
+    if(pc != 0x300 + 4) {
+        outcome.success = false;
+        outcome.message = "Failed to skip the following instruction when not equal.";
+        return outcome;
+    }
+
+    beforeEach();
+
+    opcode = 0x4111;
+    pc = 0x400;
+    V[1] = 0x11;
+
+    runCurrentOpcode();
+
+    if(pc != 0x400 + 2) {
+        outcome.success = false;
+        outcome.message = "Failed to not skip the following instruction when equal.";
+        return outcome;
+    }
 
     return outcome;
 }
