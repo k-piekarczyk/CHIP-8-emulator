@@ -340,7 +340,7 @@ Tester::TestOutcome Tester::op_7xkk_test_() {
 Tester::TestOutcome Tester::op_8xy0_test_() {
     TestOutcome outcome{"8xy0", true, false};
 
-    opcode = 8010;
+    opcode = 0x8010;
     V[0] = 0x2;
     V[1] = 0x3;
     runCurrentOpcode();
@@ -354,9 +354,20 @@ Tester::TestOutcome Tester::op_8xy0_test_() {
     return outcome;
 }
 
+// OR Vx, Vy - performs a bitwise OR on the values of Vx and Vy, then stores the result in Vx
 Tester::TestOutcome Tester::op_8xy1_test_() {
+    TestOutcome outcome{"8xy1", true, false};
+
+    opcode = 0x8011;
+    V[0] = 0b10110110;
+    V[1] = 0b11100000;
     runCurrentOpcode();
-    TestOutcome outcome{"8xy1", false, true};
+
+    if (V[0] != 0b11110110) {
+        outcome.success = false;
+        outcome.message = "Failed to properly load the value into the register.";
+        return outcome;
+    }
 
     return outcome;
 }
