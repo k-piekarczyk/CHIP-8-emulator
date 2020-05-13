@@ -372,9 +372,20 @@ Tester::TestOutcome Tester::op_8xy1_test_() {
     return outcome;
 }
 
+// AND Vx, Vy - performs a bitwise AND on the values of Vx and Vy, then stores the result
 Tester::TestOutcome Tester::op_8xy2_test_() {
+    TestOutcome outcome{"8xy2", true, false};
+
+    opcode = 0x8012;
+    V[0] = 0b10110110;
+    V[1] = 0b11100000;
     runCurrentOpcode();
-    TestOutcome outcome{"8xy2", false, true};
+
+    if (V[0] != 0b10100000) {
+        outcome.success = false;
+        outcome.message = "Failed to properly perform the AND operation.";
+        return outcome;
+    }
 
     return outcome;
 }
