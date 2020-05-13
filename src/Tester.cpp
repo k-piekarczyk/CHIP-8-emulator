@@ -305,7 +305,15 @@ Tester::TestOutcome Tester::op_5xy0_test_() {
 Tester::TestOutcome Tester::op_6xkk_test_() {
     TestOutcome outcome{"6xkk", true, false};
 
+    opcode = 0x6011;
+    V[0] = 0x0;
     runCurrentOpcode();
+
+    if(V[0] != 0x11) {
+        outcome.success = false;
+        outcome.message = "Failed to properly load the value into the register.";
+        return outcome;
+    }
 
     return outcome;
 }
