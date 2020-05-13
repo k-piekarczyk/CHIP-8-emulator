@@ -270,6 +270,7 @@ Tester::TestOutcome Tester::op_4xkk_test_() {
 // SE Vx, Vy - skip the following instruction if  Vx == Vy
 Tester::TestOutcome Tester::op_5xy0_test_() {
     TestOutcome outcome{"5xy0", false, true};
+
     opcode = 0x5020;
     pc = 0x300;
     V[0] = 0x21;
