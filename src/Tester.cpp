@@ -408,37 +408,190 @@ Tester::TestOutcome Tester::op_8xy3_test_() {
     return outcome;
 }
 
+// ADD Vx, Vy - adds Vx to Vy, stores the lowest 8 bits of the result in Vx, set VF = carry
 Tester::TestOutcome Tester::op_8xy4_test_() {
+    TestOutcome outcome{"8xy4", true, false};
+
+    opcode = 0x8014;
+    V[0] = 0x1;
+    V[1] = 0x1;
+    V[0xF] = 0;
     runCurrentOpcode();
-    TestOutcome outcome{"8xy4", false, true};
+
+    if(V[0] != 0x2) {
+        outcome.success = false;
+        outcome.message = "Failed to properly add the values.";
+        return outcome;
+    }
+
+    if(V[0xF] != 0) {
+        outcome.success = false;
+        outcome.message = "Set the carry flag despite lack of overflow.";
+        return outcome;
+    }
+
+    beforeEach();
+
+    opcode = 0x8014;
+    V[0] = 0xFF;
+    V[1] = 0xA;
+    V[0xF] = 0;
+    runCurrentOpcode();
+
+    if(V[0] != 0x9) {
+        outcome.success = false;
+        outcome.message = "Failed to properly add the values (with overflow).";
+        return outcome;
+    }
+
+    if(V[0xF] != 1) {
+        outcome.success = false;
+        outcome.message = "Unset the carry flag despite overflow.";
+        return outcome;
+    }
 
     return outcome;
 }
 
+// SUB Vx, Vy - sets VF to 1 if Vx > Vy else to 0, subtracts Vy from Vx, stores result in Vx
 Tester::TestOutcome Tester::op_8xy5_test_() {
+    TestOutcome outcome{"8xy5", true, false};
+
+    opcode = 0x8015;
+    V[0] = 0x9;
+    V[1] = 0x5;
+    V[0xF] = 0;
     runCurrentOpcode();
-    TestOutcome outcome{"8xy5", false, true};
+
+    if(V[0] != 0x4) {
+        outcome.success = false;
+        outcome.message = "Failed to properly subtract the values.";
+        return outcome;
+    }
+
+    if(V[0xF] != 1) {
+        outcome.success = false;
+        outcome.message = "Unsets the carry flag despite lack of underflow.";
+        return outcome;
+    }
+
+    beforeEach();
+
+    opcode = 0x8015;
+    V[0] = 0x5;
+    V[1] = 0x6;
+    V[0xF] = 0;
+    runCurrentOpcode();
+
+    if(V[0] != 0xFF) {
+        outcome.success = false;
+        outcome.message = "Failed to properly subtract the values (with underflow).";
+        return outcome;
+    }
+
+    if(V[0xF] != 0) {
+        outcome.success = false;
+        outcome.message = "Sets the carry flag despite underflow.";
+        return outcome;
+    }
 
     return outcome;
 }
 
+
+// SHR Vx, Vy - stores the value of register Vy shifted right one bit in register Vx, sets register VF to the least significant bit prior to the shift
 Tester::TestOutcome Tester::op_8xy6_test_() {
+    TestOutcome outcome{"8xy6", true, false};
+
+    opcode = 0x8016;
+    V[0] = 0;
+    V[1] = 0b11110101;
+    V[0xF] = 0;
+
     runCurrentOpcode();
-    TestOutcome outcome{"8xy6", false, true};
+
+    if(V[0] != 0b01111010) {
+        outcome.success = false;
+        outcome.message = "Failed to properly shift the value right.";
+        return outcome;
+    }
+
+    if(V[0xF] != 1) {
+        outcome.success = false;
+        outcome.message = "Failed to properly set the carry flag.";
+        return outcome;
+    }
 
     return outcome;
 }
 
+// SUBN Vx, Vy - sets VF to 1 if Vy > Vx else to 0, subtracts Vx from Vy, stores result in Vx
 Tester::TestOutcome Tester::op_8xy7_test_() {
+    TestOutcome outcome{"8xy7", true, false};
+
+    opcode = 0x8017;
+    V[0] = 0x9;
+    V[1] = 0x8;
+    V[0xF] = 0;
     runCurrentOpcode();
-    TestOutcome outcome{"8xy7", false, true};
+
+    if(V[0] != 0xFF) {
+        outcome.success = false;
+        outcome.message = "Failed to properly subtract the values (with underflow).";
+        return outcome;
+    }
+
+    if(V[0xF] != 0) {
+        outcome.success = false;
+        outcome.message = "Sets the carry flag despite the underflow.";
+        return outcome;
+    }
+
+    beforeEach();
+
+    opcode = 0x8017;
+    V[0] = 0x5;
+    V[1] = 0x6;
+    V[0xF] = 0;
+    runCurrentOpcode();
+
+    if(V[0] != 0x1) {
+        outcome.success = false;
+        outcome.message = "Failed to properly subtract the values.";
+        return outcome;
+    }
+
+    if(V[0xF] != 1) {
+        outcome.success = false;
+        outcome.message = "Unsets the carry flag despite the lack underflow.";
+        return outcome;
+    }
 
     return outcome;
 }
 
+// SHL Vx, Vy - stores the value of register Vy shifted left one bit in register Vx, sets register VF to the most significant bit prior to the shift
 Tester::TestOutcome Tester::op_8xyE_test_() {
+    TestOutcome outcome{"8xyE", true, false};
+
+    opcode = 0x801E;
+    V[0] = 0;
+    V[1] = 0b11110101;
+    V[0xF] = 0;
+
     runCurrentOpcode();
-    TestOutcome outcome{"8xyE", false, true};
+
+    if(V[0] != 0b11101010) {
+        outcome.success = false;
+        outcome.message = "Failed to properly shift the value left.";
+        return outcome;
+    }
+
+    if(V[0xF] != 1) {
+        outcome.success = false;
+        outcome.message = "Failed to properly set the carry flag.";
+        return outcome;
+    }
 
     return outcome;
 }

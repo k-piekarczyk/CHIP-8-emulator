@@ -475,7 +475,7 @@ void CHIP8::op_8xy7_(unsigned char a, unsigned char b, unsigned char c, unsigned
     pc += 2;
 }
 
-// SHL Vx, Vy - stores the value of register Vy shifted left one bit in register Vx, sets register VF to the least significant bit prior to the shift
+// SHL Vx, Vy - stores the value of register Vy shifted left one bit in register Vx, sets register VF to the most significant bit prior to the shift
 void CHIP8::op_8xyE_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     if (verbose) printf("[%04X]: SHL V%X, V%X\n", pc, b, c);
 
