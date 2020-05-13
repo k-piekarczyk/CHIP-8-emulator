@@ -336,9 +336,20 @@ Tester::TestOutcome Tester::op_7xkk_test_() {
     return outcome;
 }
 
+// LD Vx, Vy - stores the value of register Vy in register Vx
 Tester::TestOutcome Tester::op_8xy0_test_() {
+    TestOutcome outcome{"8xy0", true, false};
+
+    opcode = 8010;
+    V[0] = 0x2;
+    V[1] = 0x3;
     runCurrentOpcode();
-    TestOutcome outcome{"8xy0", false, true};
+
+    if(V[0] != 0x3) {
+        outcome.success = false;
+        outcome.message = "Failed to properly load the value into the register.";
+        return outcome;
+    }
 
     return outcome;
 }
