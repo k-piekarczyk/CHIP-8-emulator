@@ -40,7 +40,7 @@ void Tester::runTests() {
         }
     std::cout << std::endl;
 
-    std::cout << "Succeded: " << succeded << " Skipped: " << skipped << " Failed: " << failed << std::endl;
+    std::cout << "Results:\n\t- succeded: " << succeded << "\n\t- skipped: " << skipped << "\n\t- failed: " << failed << std::endl;
 }
 
 void Tester::init() {
@@ -596,23 +596,72 @@ Tester::TestOutcome Tester::op_8xyE_test_() {
     return outcome;
 }
 
+// SNE Vx, Vy - skips next instruction if Vx != Vy
 Tester::TestOutcome Tester::op_9xy0_test_() {
+    TestOutcome outcome{"9xy0", true, false};
+
+    opcode = 0x9010;
+    pc = 0x300;
+    V[0] = 0x21;
+    V[1] = 0x21;
+
     runCurrentOpcode();
-    TestOutcome outcome{"9xy0", false, true};
+
+    if(pc != 0x300 + 2) {
+        outcome.success = false;
+        outcome.message = "Failed to not skip the following instruction when registers are equal.";
+        return outcome;
+    }
+
+    beforeEach();
+
+    opcode = 0x9010;
+    pc = 0x300;
+    V[0] = 0x20;
+    V[1] = 0x21;
+
+    runCurrentOpcode();
+
+    if(pc != 0x300 + 4) {
+        outcome.success = false;
+        outcome.message = "Failed to skip the following instruction when registers are not equal.";
+        return outcome;
+    }
 
     return outcome;
 }
 
+// LD I, addr - sets register I to nnn
 Tester::TestOutcome Tester::op_Annn_test_() {
+    TestOutcome outcome{"Annn", true, false};
+
+    opcode = 0xA123;
     runCurrentOpcode();
-    TestOutcome outcome{"Annn", false, true};
+
+    if (I != 0x123) {
+        outcome.success = false;
+        outcome.message = "Failed to load a correct value into the I register.";
+        return outcome;
+    }
 
     return outcome;
 }
 
+// JMP V0, addr - jump to location nnn + V0
 Tester::TestOutcome Tester::op_Bnnn_test_() {
+    TestOutcome outcome{"Bnnn", true, false};
+
+    opcode = 0xB333;
+    pc = 0x200;
+    V[0] = 0x1B;
+
     runCurrentOpcode();
-    TestOutcome outcome{"Bnnn", false, true};
+
+    if (pc != 0x333 + 0x1B) {
+        outcome.success = false;
+        outcome.message = "Failed to jump to the correct address.";
+        return outcome;
+    }
 
     return outcome;
 }
