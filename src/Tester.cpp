@@ -666,92 +666,99 @@ Tester::TestOutcome Tester::op_Bnnn_test_() {
     return outcome;
 }
 
+// RND Vx, byte - sets Vx to a random byte ANDed with kk
 Tester::TestOutcome Tester::op_Cxkk_test_() {
+    TestOutcome outcome{"Cxkk", true, false};
+
+    opcode = 0xC00F;
+    V[0] = 0xFF;
+
     runCurrentOpcode();
-    TestOutcome outcome{"Cxkk", false, true};
+
+    if (!(V[0] >= 0 && V[0] <= 0xF)) {
+        outcome.success = false;
+        outcome.message = "Failed to generate a random number with correct mask.";
+        return outcome;
+    }
 
     return outcome;
 }
 
+// DRW Vx, Vy, N - draws a sprite at position Vx, Vy with N bytes of sprite data starting at address stored in I, sets VF if any pixel is unset
 Tester::TestOutcome Tester::op_Dxyn_test_() {
-    runCurrentOpcode();
     TestOutcome outcome{"Dxyn", false, true};
+
+    opcode = 0xD501;
+    I = 0x400;
+    V[0xF] = 0;
+    memory[0x400] = 0b10101010;
+
+
 
     return outcome;
 }
 
 Tester::TestOutcome Tester::op_Ex9E_test_() {
-    runCurrentOpcode();
     TestOutcome outcome{"Ex9E", false, true};
 
     return outcome;
 }
 
 Tester::TestOutcome Tester::op_ExA1_test_() {
-    runCurrentOpcode();
     TestOutcome outcome{"ExA1", false, true};
 
     return outcome;
 }
 
 Tester::TestOutcome Tester::op_Fx07_test_() {
-    runCurrentOpcode();
     TestOutcome outcome{"Fx07", false, true};
 
     return outcome;
 }
 
 Tester::TestOutcome Tester::op_Fx0A_test_() {
-    runCurrentOpcode();
     TestOutcome outcome{"Fx0A", false, true};
 
     return outcome;
 }
 
 Tester::TestOutcome Tester::op_Fx15_test_() {
-    runCurrentOpcode();
     TestOutcome outcome{"Fx15", false, true};
 
     return outcome;
 }
 
 Tester::TestOutcome Tester::op_Fx18_test_() {
-    runCurrentOpcode();
     TestOutcome outcome{"Fx18", false, true};
 
     return outcome;
 }
 
 Tester::TestOutcome Tester::op_Fx1E_test_() {
-    runCurrentOpcode();
     TestOutcome outcome{"Fx1E", false, true};
 
     return outcome;
 }
 
 Tester::TestOutcome Tester::op_Fx29_test_() {
-    runCurrentOpcode();
     TestOutcome outcome{"Fx29", false, true};
 
     return outcome;
 }
 
 Tester::TestOutcome Tester::op_Fx33_test_() {
-    runCurrentOpcode();
     TestOutcome outcome{"Fx33", false, true};
 
     return outcome;
 }
 
 Tester::TestOutcome Tester::op_Fx55_test_() {
-    runCurrentOpcode();
     TestOutcome outcome{"Fx55", false, true};
 
     return outcome;
 }
 
 Tester::TestOutcome Tester::op_Fx65_test_() {
-    runCurrentOpcode();
     TestOutcome outcome{"Fx65", false, true};
 
     return outcome;
