@@ -826,32 +826,85 @@ Tester::TestOutcome Tester::op_ExA1_test_() {
     return outcome;
 }
 
+// LD Vx, DT - stores the current delay timer value in Vx
 Tester::TestOutcome Tester::op_Fx07_test_() {
-    TestOutcome outcome{"Fx07", false, true};
+    TestOutcome outcome{"Fx07", true, false};
+
+    opcode = 0xF507;
+    delayTimer = 0x1F;
+    V[5] = 0;
+
+    runCurrentOpcode();
+
+    if (V[5] != 0x1F) {
+        outcome.success = false;
+        outcome.message = "Failed to load the current delay timer value into the register.";
+        return outcome;
+    }
 
     return outcome;
 }
 
+// LD Vx, K - waits for a key press, stores the value of key press in Vx
 Tester::TestOutcome Tester::op_Fx0A_test_() {
-    TestOutcome outcome{"Fx0A", false, true};
-
+    TestOutcome outcome{"Fx0A", false, true,
+                        "Requires manual testing."};
     return outcome;
 }
 
+// LD DT, Vx - sets the delay timer to value from Vx
 Tester::TestOutcome Tester::op_Fx15_test_() {
-    TestOutcome outcome{"Fx15", false, true};
+    TestOutcome outcome{"Fx15", true, false};
+
+    opcode = 0xF515;
+    delayTimer = 0;
+    V[5] = 0x2F;
+
+    runCurrentOpcode();
+
+    if (delayTimer != 0x2F) {
+        outcome.success = false;
+        outcome.message = "Failed to load the register value into the delay timer.";
+        return outcome;
+    }
 
     return outcome;
 }
 
+// LD ST, Vx - sets the sound timer to value from Vx
 Tester::TestOutcome Tester::op_Fx18_test_() {
-    TestOutcome outcome{"Fx18", false, true};
+    TestOutcome outcome{"Fx18", true, false};
+
+    opcode = 0xF518;
+    delayTimer = 0;
+    V[5] = 0x2F;
+
+    runCurrentOpcode();
+
+    if (soundTimer != 0x2F) {
+        outcome.success = false;
+        outcome.message = "Failed to load the register value into the sound timer.";
+        return outcome;
+    }
 
     return outcome;
 }
 
+// ADD I, Vx - adds Vx to I, stores result in I
 Tester::TestOutcome Tester::op_Fx1E_test_() {
-    TestOutcome outcome{"Fx1E", false, true};
+    TestOutcome outcome{"Fx1E", true, false};
+
+    opcode = 0xF21E;
+    I = 0x300;
+    V[2] = 0xAF;
+
+    runCurrentOpcode();
+
+    if (I != 0x300 + 0xAF) {
+        outcome.success = false;
+        outcome.message = "Failed to correctly add the register value to I register.";
+        return outcome;
+    }
 
     return outcome;
 }
