@@ -22,6 +22,8 @@ void CHIP8::initialize() {
     resetTimers();
     loadFontset();
     initializeOpcodeArray();
+
+    srand(time(NULL));
 }
 
 void CHIP8::next() {
@@ -69,7 +71,6 @@ void CHIP8::execute() {
     char b = (opcode & 0x0F00) >> 8;
     char c = (opcode & 0x00F0) >> 4;
     char d = opcode & 0x000F;
-
     (this->*opcode_func)(a, b, c, d);
 }
 
@@ -529,10 +530,10 @@ void CHIP8::op_Cxkk_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
     if (verbose) printf("[%04X]: RND V%X, %02X\n", pc, b, kk);
 
-    std::random_device generator;
-    std::uniform_int_distribution<unsigned char> distribution(0, 0xFF);
+    unsigned char ranVal = rand() % 0x100;
+    unsigned char val = ranVal & kk;
 
-    V[b] = distribution(generator) & kk;
+    V[b] = val;
 
     pc += 2;
 }
@@ -564,6 +565,7 @@ void CHIP8::op_Dxyn_(unsigned char a, unsigned char b, unsigned char c, unsigned
     }
 
     if (collisionDetected) V[0xF] = 1;
+    else V[0xF] = 0;
 
     drawPerformed = true;
 
