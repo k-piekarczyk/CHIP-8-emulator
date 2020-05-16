@@ -760,14 +760,68 @@ Tester::TestOutcome Tester::op_Dxyn_test_() {
     return outcome;
 }
 
+// SKP Vx - skips next instruction if key with the value of Vx is pressed
 Tester::TestOutcome Tester::op_Ex9E_test_() {
-    TestOutcome outcome{"Ex9E", false, true};
+    TestOutcome outcome{"Ex9E", true, false};
+
+    opcode = 0xE09E;
+    pc = 0x300;
+    V[0] = 0xB;
+    keyboard[0xB] = 0xFF;
+
+    runCurrentOpcode();
+
+    if (pc != 0x300 + 4) {
+        outcome.success = false;
+        outcome.message = "Failed to correctly skip the fo;lowing instruction on key press.";
+        return outcome;
+    }
+
+    opcode = 0xE09E;
+    pc = 0x300;
+    V[0] = 0xB;
+    keyboard[0xB] = 0;
+
+    runCurrentOpcode();
+
+    if (pc != 0x300 + 2) {
+        outcome.success = false;
+        outcome.message = "Skipped the instruction despite the key not being pressed.";
+        return outcome;
+    }
 
     return outcome;
 }
 
+// SKNP Vx - skips next instruction if key with the value of Vx is not pressed
 Tester::TestOutcome Tester::op_ExA1_test_() {
-    TestOutcome outcome{"ExA1", false, true};
+    TestOutcome outcome{"ExA1", true, false};
+
+    opcode = 0xE0A1;
+    pc = 0x300;
+    V[0] = 0xB;
+    keyboard[0xB] = 0;
+
+    runCurrentOpcode();
+
+    if (pc != 0x300 + 4) {
+        outcome.success = false;
+        outcome.message = "Failed to correctly skip the following instruction despite the not being pressed.";
+        return outcome;
+    }
+
+    opcode = 0xE0A1;
+    pc = 0x300;
+    V[0] = 0xB;
+    keyboard[0xB] = 0xFF;
+
+    runCurrentOpcode();
+
+    if (pc != 0x300 + 2) {
+        outcome.success = false;
+        outcome.message = "Skipped the instruction despite the key being pressed.";
+        return outcome;
+    }
 
     return outcome;
 }
