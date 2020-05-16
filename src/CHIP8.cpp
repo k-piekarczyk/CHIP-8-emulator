@@ -281,7 +281,6 @@ void CHIP8::op_00E0_(unsigned char a, unsigned char b, unsigned char c, unsigned
     if (verbose) printf("[%04X]: CLS\n", pc);
 
     clearDisplay();
-    drawPerformed = true;
     pc += 2;
 }
 
@@ -446,10 +445,12 @@ void CHIP8::op_8xy4_(unsigned char a, unsigned char b, unsigned char c, unsigned
 void CHIP8::op_8xy5_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     if (verbose) printf("[%04X]: ADD V%X, V%X\n", pc, b, c);
 
-    if (V[b] > V[c]) V[0xF] = 1;
-    else V[0xF] = 0;
+    unsigned char carryBit;
+    if (V[b] > V[c]) carryBit = 1;
+    else carryBit = 0;
 
     V[b] = V[b] - V[c];
+    V[0xF] = carryBit;
 
     pc += 2;
 }
@@ -458,8 +459,9 @@ void CHIP8::op_8xy5_(unsigned char a, unsigned char b, unsigned char c, unsigned
 void CHIP8::op_8xy6_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     if (verbose) printf("[%04X]: SHR V%X, V%X\n", pc, b, c);
 
-    V[0xF] = V[c] & 1;
+    unsigned char carryBit = V[c] & 1;
     V[b] = V[c] >> 1;
+    V[0xF] = carryBit;
 
     pc += 2;
 }
@@ -468,10 +470,13 @@ void CHIP8::op_8xy6_(unsigned char a, unsigned char b, unsigned char c, unsigned
 void CHIP8::op_8xy7_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     if (verbose) printf("[%04X]: SUBN V%X, V%X\n", pc, b, c);
 
-    if (V[c] > V[b]) V[0xF] = 1;
-    else V[0xF] = 0;
+    unsigned char carryBit;
+    if (V[c] >= V[b]) carryBit = 1;
+    else carryBit = 0;
 
     V[b] = V[c] - V[b];
+
+    V[0xF] = carryBit;
 
     pc += 2;
 }
@@ -480,8 +485,10 @@ void CHIP8::op_8xy7_(unsigned char a, unsigned char b, unsigned char c, unsigned
 void CHIP8::op_8xyE_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     if (verbose) printf("[%04X]: SHL V%X, V%X\n", pc, b, c);
 
-    V[0xF] = V[c] & 1;
+
+    unsigned char carryBit = V[c] & 1;
     V[b] = V[c] << 1;
+    V[0xF] = carryBit;
 
     pc += 2;
 }
@@ -549,10 +556,10 @@ void CHIP8::op_Dxyn_(unsigned char a, unsigned char b, unsigned char c, unsigned
     bool checkForCollision, collisionDetected = false;
     unsigned int posX, posY, pos;
     for (unsigned char n = 0; n < N; n++) {
-        posY = (Y + n) % Spec::V_SIZE;
+        posY = (Y + n);
         for (unsigned char x = 0; x < 8; x++) {
             checkForCollision = false;
-            posX = (X + x) % Spec::H_SIZE;
+            posX = (X + x);
             pos = (posY * 64) + posX;
 
             if (!collisionDetected && gfx[pos]) checkForCollision = true;
@@ -566,8 +573,6 @@ void CHIP8::op_Dxyn_(unsigned char a, unsigned char b, unsigned char c, unsigned
 
     if (collisionDetected) V[0xF] = 1;
     else V[0xF] = 0;
-
-    drawPerformed = true;
 
     pc += 2;
 }

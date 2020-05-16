@@ -22,10 +22,7 @@ void Runner::start() {
         soundTimer.update();
         delayTimer.update();
         chip.next();
-        if (chip.drawPerformed){
-            g.draw();
-            chip.drawPerformed = false;
-        }
+        g.draw();
         if(delay) sf::sleep(sf::milliseconds(1));
     }
 }

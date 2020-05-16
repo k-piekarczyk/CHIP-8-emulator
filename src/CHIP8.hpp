@@ -36,8 +36,6 @@ protected:
     bool verbose = true;
 
 public:
-    bool drawPerformed = false;
-
     void initialize();
 
     void next();

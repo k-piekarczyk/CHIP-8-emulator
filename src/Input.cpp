@@ -30,7 +30,7 @@ void Input::update() {
 void Input::await() {
     sf::Event event{};
     do window->waitEvent(event);
-    while(!handleKeyPressedEvents(event));
+    while(!(event.type == sf::Event::KeyPressed && handleKeyPressedEvents(event)));
 }
 
 bool Input::handleKeyPressedEvents(sf::Event &event) {
