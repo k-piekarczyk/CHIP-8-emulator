@@ -848,7 +848,7 @@ Tester::TestOutcome Tester::op_Fx07_test_() {
 // LD Vx, K - waits for a key press, stores the value of key press in Vx
 Tester::TestOutcome Tester::op_Fx0A_test_() {
     TestOutcome outcome{"Fx0A", false, true,
-                        "Requires manual testing."};
+                        "Requires keyboard events, as such, is not automaticly testable."};
     return outcome;
 }
 
@@ -909,26 +909,158 @@ Tester::TestOutcome Tester::op_Fx1E_test_() {
     return outcome;
 }
 
+// LD F, Vx - sets I to font with the hexadecimal value of Vx
 Tester::TestOutcome Tester::op_Fx29_test_() {
-    TestOutcome outcome{"Fx29", false, true};
+    TestOutcome outcome{"Fx29", true, false};
+
+    opcode = 0xF929;
+    I = 0x300;
+    V[9] = 0xA;
+
+    runCurrentOpcode();
+
+    if (I != 0x50 + 50) {
+        outcome.success = false;
+        outcome.message = "Failed to correctly set the value of I register.";
+        return outcome;
+    }
 
     return outcome;
 }
 
+// LD B, Vx - sets I, I+1, I+2 to BCD coded hundreds, tenths and ones based on value in Vx
 Tester::TestOutcome Tester::op_Fx33_test_() {
-    TestOutcome outcome{"Fx33", false, true};
+    TestOutcome outcome{"Fx33", true, false};
+
+    opcode = 0xF033;
+    V[0] = 123;
+    I = 0x300;
+    memory[0x300] = 0;
+    memory[0x301] = 0;
+    memory[0x302] = 0;
+
+    runCurrentOpcode();
+
+    if (!(memory[0x300] == 1 && memory[0x301] == 2 && memory[0x302] == 3)) {
+        outcome.success = false;
+        outcome.message = "Failed to correctly save the BCD value into memory.";
+        return outcome;
+    }
 
     return outcome;
 }
 
+// LD [I], Vx - stores values from registers V0 through Vx in memory starting at I, then increments I by x+1
 Tester::TestOutcome Tester::op_Fx55_test_() {
-    TestOutcome outcome{"Fx55", false, true};
+    TestOutcome outcome{"Fx55", true, false};
+
+    opcode = 0xFF55;
+    I = 0x300;
+    V[0] = 1;
+    V[1] = 2;
+    V[2] = 3;
+    V[3] = 4;
+    V[4] = 5;
+    V[5] = 6;
+    V[6] = 7;
+    V[7] = 8;
+    V[8] = 9;
+    V[9] = 10;
+    V[0xA] = 11;
+    V[0xB] = 12;
+    V[0xC] = 13;
+    V[0xD] = 14;
+    V[0xE] = 15;
+    V[0xF] = 16;
+
+    runCurrentOpcode();
+
+    if (!(
+            memory[0x300 + 0] == 1 &&
+            memory[0x300 + 1] == 2 &&
+            memory[0x300 + 2] == 3 &&
+            memory[0x300 + 3] == 4 &&
+            memory[0x300 + 4] == 5 &&
+            memory[0x300 + 5] == 6 &&
+            memory[0x300 + 6] == 7 &&
+            memory[0x300 + 7] == 8 &&
+            memory[0x300 + 8] == 9 &&
+            memory[0x300 + 9] == 10 &&
+            memory[0x300 + 0xA] == 11 &&
+            memory[0x300 + 0xB] == 12 &&
+            memory[0x300 + 0xC] == 13 &&
+            memory[0x300 + 0xD] == 14 &&
+            memory[0x300 + 0xE] == 15 &&
+            memory[0x300 + 0xF] == 16
+    )) {
+        outcome.success = false;
+        outcome.message = "Failed to correctly save the registers into memory.";
+        return outcome;
+    }
+
+    if (I != 0x300 + 0xF + 1) {
+        outcome.success = false;
+        outcome.message = "Failed to correctly set the I register value.";
+        return outcome;
+    }
 
     return outcome;
 }
 
+// LD Vx, [I] - loads values into registers V0 through Vx from memory starting at I, then increments I by x+1
 Tester::TestOutcome Tester::op_Fx65_test_() {
-    TestOutcome outcome{"Fx65", false, true};
+    TestOutcome outcome{"Fx65", true, false};
+
+    opcode = 0xFF65;
+    I = 0x300;
+
+    memory[0x300 + 0] = 1;
+    memory[0x300 + 1] = 2;
+    memory[0x300 + 2] = 3;
+    memory[0x300 + 3] = 4;
+    memory[0x300 + 4] = 5;
+    memory[0x300 + 5] = 6;
+    memory[0x300 + 6] = 7;
+    memory[0x300 + 7] = 8;
+    memory[0x300 + 8] = 9;
+    memory[0x300 + 9] = 10;
+    memory[0x300 + 0xA] = 11;
+    memory[0x300 + 0xB] = 12;
+    memory[0x300 + 0xC] = 13;
+    memory[0x300 + 0xD] = 14;
+    memory[0x300 + 0xE] = 15;
+    memory[0x300 + 0xF] = 16;
+
+    runCurrentOpcode();
+
+    if (!(
+            V[0] == 1 &&
+            V[1] == 2 &&
+            V[2] == 3 &&
+            V[3] == 4 &&
+            V[4] == 5 &&
+            V[5] == 6 &&
+            V[6] == 7 &&
+            V[7] == 8 &&
+            V[8] == 9 &&
+            V[9] == 10 &&
+            V[0xA] == 11 &&
+            V[0xB] == 12 &&
+            V[0xC] == 13 &&
+            V[0xD] == 14 &&
+            V[0xE] == 15 &&
+            V[0xF] == 16
+    )) {
+        outcome.success = false;
+        outcome.message = "Failed to correctly load the memory into registers.";
+        return outcome;
+    }
+
+    if (I != 0x300 + 0xF + 1) {
+        outcome.success = false;
+        outcome.message = "Failed to correctly set the I register value.";
+        return outcome;
+    }
 
     return outcome;
 }
