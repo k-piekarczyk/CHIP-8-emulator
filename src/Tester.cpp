@@ -40,7 +40,8 @@ void Tester::runTests() {
         }
     std::cout << std::endl;
 
-    std::cout << "Results:\n\t- succeded: " << succeded << "\n\t- skipped: " << skipped << "\n\t- failed: " << failed << std::endl;
+    std::cout << "Results:\n\t- succeded: " << succeded << "\n\t- skipped: " << skipped << "\n\t- failed: " << failed
+              << std::endl;
 }
 
 void Tester::init() {
@@ -120,13 +121,13 @@ Tester::TestOutcome Tester::op_00EE_test_() {
 
     runCurrentOpcode();
 
-    if(sp != 0) {
+    if (sp != 0) {
         outcome.success = false;
         outcome.message = "Failed to correctly decrease the stack pointer.";
         return outcome;
     }
 
-    if(pc != 0x270 + 2) {
+    if (pc != 0x270 + 2) {
         outcome.success = false;
         outcome.message = "Failed to set the program counter to the correct value.";
         return outcome;
@@ -144,7 +145,7 @@ Tester::TestOutcome Tester::op_0nnn_test_() {
 
     runCurrentOpcode();
 
-    if(pc != 0x300 + 2) {
+    if (pc != 0x300 + 2) {
         outcome.success = false;
         outcome.message = "Failed to properly increment the program counter.";
         return outcome;
@@ -162,7 +163,7 @@ Tester::TestOutcome Tester::op_1nnn_test_() {
 
     runCurrentOpcode();
 
-    if(pc != 0x333) {
+    if (pc != 0x333) {
         outcome.success = false;
         outcome.message = "Failed to set the program counter to the correct value.";
         return outcome;
@@ -181,19 +182,19 @@ Tester::TestOutcome Tester::op_2nnn_test_() {
 
     runCurrentOpcode();
 
-    if(pc != 0x333) {
+    if (pc != 0x333) {
         outcome.success = false;
         outcome.message = "Failed to set the program counter to the correct value.";
         return outcome;
     }
 
-    if(sp != 1) {
+    if (sp != 1) {
         outcome.success = false;
         outcome.message = "Failed to increment stack pointer.";
         return outcome;
     }
 
-    if(stack[0] != 0x500) {
+    if (stack[0] != 0x500) {
         outcome.success = false;
         outcome.message = "Failed to push program counter value to stack.";
         return outcome;
@@ -212,7 +213,7 @@ Tester::TestOutcome Tester::op_3xkk_test_() {
 
     runCurrentOpcode();
 
-    if(pc != 0x300 + 4) {
+    if (pc != 0x300 + 4) {
         outcome.success = false;
         outcome.message = "Failed to skip the following instruction when equal.";
         return outcome;
@@ -226,7 +227,7 @@ Tester::TestOutcome Tester::op_3xkk_test_() {
 
     runCurrentOpcode();
 
-    if(pc != 0x400 + 2) {
+    if (pc != 0x400 + 2) {
         outcome.success = false;
         outcome.message = "Failed to not skip the following instruction when not equal.";
         return outcome;
@@ -244,7 +245,7 @@ Tester::TestOutcome Tester::op_4xkk_test_() {
 
     runCurrentOpcode();
 
-    if(pc != 0x300 + 4) {
+    if (pc != 0x300 + 4) {
         outcome.success = false;
         outcome.message = "Failed to skip the following instruction when not equal.";
         return outcome;
@@ -258,7 +259,7 @@ Tester::TestOutcome Tester::op_4xkk_test_() {
 
     runCurrentOpcode();
 
-    if(pc != 0x400 + 2) {
+    if (pc != 0x400 + 2) {
         outcome.success = false;
         outcome.message = "Failed to not skip the following instruction when equal.";
         return outcome;
@@ -269,7 +270,7 @@ Tester::TestOutcome Tester::op_4xkk_test_() {
 
 // SE Vx, Vy - skip the following instruction if  Vx == Vy
 Tester::TestOutcome Tester::op_5xy0_test_() {
-    TestOutcome outcome{"5xy0", false, true};
+    TestOutcome outcome{"5xy0", true, false};
 
     opcode = 0x5020;
     pc = 0x300;
@@ -278,7 +279,7 @@ Tester::TestOutcome Tester::op_5xy0_test_() {
 
     runCurrentOpcode();
 
-    if(pc != 0x300 + 4) {
+    if (pc != 0x300 + 4) {
         outcome.success = false;
         outcome.message = "Failed to skip the following instruction when registers are equal.";
         return outcome;
@@ -293,7 +294,7 @@ Tester::TestOutcome Tester::op_5xy0_test_() {
 
     runCurrentOpcode();
 
-    if(pc != 0x300 + 2) {
+    if (pc != 0x300 + 2) {
         outcome.success = false;
         outcome.message = "Failed to not skip the following instruction when registers are not equal.";
         return outcome;
@@ -310,7 +311,7 @@ Tester::TestOutcome Tester::op_6xkk_test_() {
     V[0] = 0x0;
     runCurrentOpcode();
 
-    if(V[0] != 0x11) {
+    if (V[0] != 0x11) {
         outcome.success = false;
         outcome.message = "Failed to properly load the value into the register.";
         return outcome;
@@ -327,7 +328,7 @@ Tester::TestOutcome Tester::op_7xkk_test_() {
     V[0] = 0x5;
     runCurrentOpcode();
 
-    if(V[0] != 0xA) {
+    if (V[0] != 0xA) {
         outcome.success = false;
         outcome.message = "Failed to properly add the value to the value in register.";
         return outcome;
@@ -345,7 +346,7 @@ Tester::TestOutcome Tester::op_8xy0_test_() {
     V[1] = 0x3;
     runCurrentOpcode();
 
-    if(V[0] != 0x3) {
+    if (V[0] != 0x3) {
         outcome.success = false;
         outcome.message = "Failed to properly load the value into the register.";
         return outcome;
@@ -418,13 +419,13 @@ Tester::TestOutcome Tester::op_8xy4_test_() {
     V[0xF] = 0;
     runCurrentOpcode();
 
-    if(V[0] != 0x2) {
+    if (V[0] != 0x2) {
         outcome.success = false;
         outcome.message = "Failed to properly add the values.";
         return outcome;
     }
 
-    if(V[0xF] != 0) {
+    if (V[0xF] != 0) {
         outcome.success = false;
         outcome.message = "Set the carry flag despite lack of overflow.";
         return outcome;
@@ -438,13 +439,13 @@ Tester::TestOutcome Tester::op_8xy4_test_() {
     V[0xF] = 0;
     runCurrentOpcode();
 
-    if(V[0] != 0x9) {
+    if (V[0] != 0x9) {
         outcome.success = false;
         outcome.message = "Failed to properly add the values (with overflow).";
         return outcome;
     }
 
-    if(V[0xF] != 1) {
+    if (V[0xF] != 1) {
         outcome.success = false;
         outcome.message = "Unset the carry flag despite overflow.";
         return outcome;
@@ -463,13 +464,13 @@ Tester::TestOutcome Tester::op_8xy5_test_() {
     V[0xF] = 0;
     runCurrentOpcode();
 
-    if(V[0] != 0x4) {
+    if (V[0] != 0x4) {
         outcome.success = false;
         outcome.message = "Failed to properly subtract the values.";
         return outcome;
     }
 
-    if(V[0xF] != 1) {
+    if (V[0xF] != 1) {
         outcome.success = false;
         outcome.message = "Unsets the carry flag despite lack of underflow.";
         return outcome;
@@ -483,13 +484,13 @@ Tester::TestOutcome Tester::op_8xy5_test_() {
     V[0xF] = 0;
     runCurrentOpcode();
 
-    if(V[0] != 0xFF) {
+    if (V[0] != 0xFF) {
         outcome.success = false;
         outcome.message = "Failed to properly subtract the values (with underflow).";
         return outcome;
     }
 
-    if(V[0xF] != 0) {
+    if (V[0xF] != 0) {
         outcome.success = false;
         outcome.message = "Sets the carry flag despite underflow.";
         return outcome;
@@ -510,13 +511,13 @@ Tester::TestOutcome Tester::op_8xy6_test_() {
 
     runCurrentOpcode();
 
-    if(V[0] != 0b01111010) {
+    if (V[0] != 0b01111010) {
         outcome.success = false;
         outcome.message = "Failed to properly shift the value right.";
         return outcome;
     }
 
-    if(V[0xF] != 1) {
+    if (V[0xF] != 1) {
         outcome.success = false;
         outcome.message = "Failed to properly set the carry flag.";
         return outcome;
@@ -535,13 +536,13 @@ Tester::TestOutcome Tester::op_8xy7_test_() {
     V[0xF] = 0;
     runCurrentOpcode();
 
-    if(V[0] != 0xFF) {
+    if (V[0] != 0xFF) {
         outcome.success = false;
         outcome.message = "Failed to properly subtract the values (with underflow).";
         return outcome;
     }
 
-    if(V[0xF] != 0) {
+    if (V[0xF] != 0) {
         outcome.success = false;
         outcome.message = "Sets the carry flag despite the underflow.";
         return outcome;
@@ -555,13 +556,13 @@ Tester::TestOutcome Tester::op_8xy7_test_() {
     V[0xF] = 0;
     runCurrentOpcode();
 
-    if(V[0] != 0x1) {
+    if (V[0] != 0x1) {
         outcome.success = false;
         outcome.message = "Failed to properly subtract the values.";
         return outcome;
     }
 
-    if(V[0xF] != 1) {
+    if (V[0xF] != 1) {
         outcome.success = false;
         outcome.message = "Unsets the carry flag despite the lack underflow.";
         return outcome;
@@ -581,13 +582,13 @@ Tester::TestOutcome Tester::op_8xyE_test_() {
 
     runCurrentOpcode();
 
-    if(V[0] != 0b11101010) {
+    if (V[0] != 0b11101010) {
         outcome.success = false;
         outcome.message = "Failed to properly shift the value left.";
         return outcome;
     }
 
-    if(V[0xF] != 1) {
+    if (V[0xF] != 1) {
         outcome.success = false;
         outcome.message = "Failed to properly set the carry flag.";
         return outcome;
@@ -607,7 +608,7 @@ Tester::TestOutcome Tester::op_9xy0_test_() {
 
     runCurrentOpcode();
 
-    if(pc != 0x300 + 2) {
+    if (pc != 0x300 + 2) {
         outcome.success = false;
         outcome.message = "Failed to not skip the following instruction when registers are equal.";
         return outcome;
@@ -622,7 +623,7 @@ Tester::TestOutcome Tester::op_9xy0_test_() {
 
     runCurrentOpcode();
 
-    if(pc != 0x300 + 4) {
+    if (pc != 0x300 + 4) {
         outcome.success = false;
         outcome.message = "Failed to skip the following instruction when registers are not equal.";
         return outcome;
@@ -636,6 +637,7 @@ Tester::TestOutcome Tester::op_Annn_test_() {
     TestOutcome outcome{"Annn", true, false};
 
     opcode = 0xA123;
+    I = 0x000;
     runCurrentOpcode();
 
     if (I != 0x123) {
@@ -686,14 +688,74 @@ Tester::TestOutcome Tester::op_Cxkk_test_() {
 
 // DRW Vx, Vy, N - draws a sprite at position Vx, Vy with N bytes of sprite data starting at address stored in I, sets VF if any pixel is unset
 Tester::TestOutcome Tester::op_Dxyn_test_() {
-    TestOutcome outcome{"Dxyn", false, true};
+    TestOutcome outcome{"Dxyn", true, false};
 
-    opcode = 0xD501;
+    opcode = 0xD011;
     I = 0x400;
+    V[0] = 5;
+    V[1] = 0;
     V[0xF] = 0;
     memory[0x400] = 0b10101010;
 
+    runCurrentOpcode();
 
+    unsigned char expected_gfx[Spec::DISPLAY_SIZE];
+    for (unsigned char &i : expected_gfx) {
+        i = 0;
+    }
+
+    expected_gfx[5] = 1;
+    expected_gfx[6] = 0;
+    expected_gfx[7] = 1;
+    expected_gfx[8] = 0;
+    expected_gfx[9] = 1;
+    expected_gfx[10] = 0;
+    expected_gfx[11] = 1;
+    expected_gfx[12] = 0;
+
+    bool discrepancyDetected = false;
+    for (int i = 0; i < Spec::DISPLAY_SIZE; i++)
+        if (gfx[i] != expected_gfx[i]) {
+            discrepancyDetected = true;
+            break;
+        }
+
+    if (discrepancyDetected) {
+        outcome.success = false;
+        outcome.message = "Failed to correctly draw the sprite.";
+        return outcome;
+    }
+
+    if (V[0xF] != 0) {
+        outcome.success = false;
+        outcome.message = "Incorrectly set the carry flag (VF) despite lack of collision.";
+        return outcome;
+    }
+
+    runCurrentOpcode();
+
+    for (unsigned char &i : expected_gfx) {
+        i = 0;
+    }
+
+    discrepancyDetected = false;
+    for (int i = 0; i < Spec::DISPLAY_SIZE; i++)
+        if (gfx[i] != expected_gfx[i]) {
+            discrepancyDetected = true;
+            break;
+        }
+
+    if (discrepancyDetected) {
+        outcome.success = false;
+        outcome.message = "Failed to correctly draw the sprite on top of an already drawn one.";
+        return outcome;
+    }
+
+    if (V[0xF] != 1) {
+        outcome.success = false;
+        outcome.message = "Failed to set the carry flag (VF) despite the collision.";
+        return outcome;
+    }
 
     return outcome;
 }
