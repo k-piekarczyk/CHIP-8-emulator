@@ -609,7 +609,7 @@ void CHIP8::op_Fx0A_(unsigned char a, unsigned char b, unsigned char c, unsigned
     pc += 2;
 }
 
-// LD DT, Vx - sets a delay timer to value from Vx
+// LD DT, Vx - sets the delay timer to value from Vx
 void CHIP8::op_Fx15_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     if (verbose) printf("[%04X]: LD DT, V%X\n", pc, b);
 
@@ -617,7 +617,7 @@ void CHIP8::op_Fx15_(unsigned char a, unsigned char b, unsigned char c, unsigned
     pc += 2;
 }
 
-// LD ST, Vx - sets a delay timer to value from Vx
+// LD ST, Vx - sets the sound timer to value from Vx
 void CHIP8::op_Fx18_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     if (verbose) printf("[%04X]: LD ST, V%X\n", pc, b);
     soundTimer = V[b];
