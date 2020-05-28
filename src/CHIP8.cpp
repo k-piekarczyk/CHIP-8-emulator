@@ -337,8 +337,8 @@ void CHIP8::op_2nnn_(unsigned char a, unsigned char b, unsigned char c, unsigned
         exit(EXIT_FAILURE);
     }
 
+    stack[sp] = pc;
     sp++;
-    stack[sp - 1] = pc;
     pc = addr;
 }
 
@@ -459,9 +459,12 @@ void CHIP8::op_8xy5_(unsigned char a, unsigned char b, unsigned char c, unsigned
 void CHIP8::op_8xy6_(unsigned char a, unsigned char b, unsigned char c, unsigned char d) {
     if (verbose) printf("[%04X]: SHR V%X, V%X\n", pc, b, c);
 
-    unsigned char carryBit = V[c] & 1;
-    V[b] = V[c] >> 1;
-    V[0xF] = carryBit;
+//    unsigned char carryBit = V[c] & 1;
+//    V[b] = V[c] >> 1;
+//    V[0xF] = carryBit;
+
+    V[0xF] = (V[b] & 0x01);
+    V[b] >>= 1;
 
     pc += 2;
 }
@@ -486,9 +489,12 @@ void CHIP8::op_8xyE_(unsigned char a, unsigned char b, unsigned char c, unsigned
     if (verbose) printf("[%04X]: SHL V%X, V%X\n", pc, b, c);
 
 
-    unsigned char carryBit = V[c] & 1;
-    V[b] = V[c] << 1;
-    V[0xF] = carryBit;
+//    unsigned char carryBit = V[c] & 1;
+//    V[b] = V[c] << 1;
+//    V[0xF] = carryBit;
+
+    V[0xF] = ((V[b] & 0x80) != 0);
+    V[b] <<= 1;
 
     pc += 2;
 }
