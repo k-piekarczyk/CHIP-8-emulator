@@ -29,12 +29,21 @@ void Input::update() {
 
 void Input::await() {
     sf::Event event{};
-    do window->waitEvent(event);
+    do {
+        window->waitEvent(event);
+        if (event.type == sf::Event::Closed){
+            window->close();
+            break;
+        }
+    }
     while (!(event.type == sf::Event::KeyPressed && handleKeyPressedEvents(event)));
 }
 
 bool Input::handleKeyPressedEvents(sf::Event &event) {
-    if (event.key.code == sf::Keyboard::Escape) window->close();
+    if (event.key.code == sf::Keyboard::Escape) {
+        window->close();
+        return true;
+    }
     else
         for (int i = 0; i < 0x10; i++) {
             if (event.key.code == keyMap[i]) {
