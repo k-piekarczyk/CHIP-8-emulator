@@ -612,11 +612,13 @@ void CHIP8::op_Fx0A_(unsigned char a, unsigned char b, unsigned char c, unsigned
     if (verbose) printf("[%04X]: LD V%X, K\n", pc, b);
 
     input->await();
-    for (int i = 0; i < Spec::NUMBER_OF_KEYS; i++)
-        if (V[i]) {
+    for (int i = 0; i < Spec::NUMBER_OF_KEYS; i++){
+        if (keyboard[i]) {
             V[b] = i;
             break;
         }
+    }
+
     pc += 2;
 }
 
@@ -684,8 +686,7 @@ void CHIP8::op_Fx55_(unsigned char a, unsigned char b, unsigned char c, unsigned
         memory[I + i] = V[i];
     }
 
-    I += b + 1;
-
+//    I += b + 1;
     pc += 2;
 }
 
@@ -697,7 +698,7 @@ void CHIP8::op_Fx65_(unsigned char a, unsigned char b, unsigned char c, unsigned
         V[i] = memory[I + i];
     }
 
-    I += b + 1;
+//    I += b + 1;
     pc += 2;
 }
 
