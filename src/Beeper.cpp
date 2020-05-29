@@ -8,7 +8,7 @@
 Beeper::Beeper() {
     const unsigned short SAMPLES = 44100;
     const unsigned short SAMPLE_RATE = 44100;
-    const unsigned short AMPLITUDE = 30000;
+    const unsigned short AMPLITUDE = 3000;
 
     sf::Int16 raw[SAMPLES];
 
@@ -36,6 +36,5 @@ void Beeper::start() {
 }
 
 void Beeper::stop() {
-    if (sound.getStatus() == sf::SoundSource::Status::Playing)
         sound.stop();
 }
