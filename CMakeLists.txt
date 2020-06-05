@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-set(PROJECT_NAME "projekt_indywidualny")
+set(PROJECT_NAME "8mu")
 project(${PROJECT_NAME})
 
 set(SFML_DIR "${CMAKE_CURRENT_LIST_DIR}/libs/SFML-2.5.1/lib/cmake/SFML")
