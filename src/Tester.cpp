@@ -505,8 +505,7 @@ Tester::TestOutcome Tester::op_8xy6_test_() {
     TestOutcome outcome{"8xy6", true, false};
 
     opcode = 0x8016;
-    V[0] = 0;
-    V[1] = 0b11110101;
+    V[0] = 0b11110101;
     V[0xF] = 0;
 
     runCurrentOpcode();
@@ -576,8 +575,7 @@ Tester::TestOutcome Tester::op_8xyE_test_() {
     TestOutcome outcome{"8xyE", true, false};
 
     opcode = 0x801E;
-    V[0] = 0;
-    V[1] = 0b11110101;
+    V[0] = 0b11110101;
     V[0xF] = 0;
 
     runCurrentOpcode();
@@ -998,7 +996,7 @@ Tester::TestOutcome Tester::op_Fx55_test_() {
         return outcome;
     }
 
-    if (I != 0x300 + 0xF + 1) {
+    if (I != 0x300) {
         outcome.success = false;
         outcome.message = "Failed to correctly set the I register value.";
         return outcome;
@@ -1056,7 +1054,7 @@ Tester::TestOutcome Tester::op_Fx65_test_() {
         return outcome;
     }
 
-    if (I != 0x300 + 0xF + 1) {
+    if (I != 0x300) {
         outcome.success = false;
         outcome.message = "Failed to correctly set the I register value.";
         return outcome;
